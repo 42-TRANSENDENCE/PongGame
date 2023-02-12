@@ -1,0 +1,43 @@
+
+
+.game__header {
+  background: white;
+  color: black;
+  width: 80vw;
+  margin-bottom: 20px;
+  height: 40px;
+}
+
+.game__body {
+  background: white;
+  height: calc(80vh - 160px);
+  aspect-ratio: 1.7;
+  position: relative;
+}
+
+
+.game__body > canvas {
+  width: calc(100% - 10px);
+  height: calc(100% - 10px);
+  position: absolute;
+  margin: 5px;
+  border: none;
+  top : 0;
+  right: 0;
+}
+
+.canv_background {
+  background-color: rgb(27, 72, 83);
+}
+
+.canv_animate {
+  background: rgba(0,0,0,0);
+}
+
+.game__footer {
+  background: white;
+  color: black;
+  width: 80vw;
+  margin-top: 20px;
+  height: 40px;
+}
