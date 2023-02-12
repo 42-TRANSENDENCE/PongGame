@@ -34,5 +34,9 @@ services:
       - ./volume/back:/root/back
     ports:
       - 4223:22
+      - 3001:3001
 
-  
+networks:
+  pong_net:
+    name : pong_net
+    driver: bridge
