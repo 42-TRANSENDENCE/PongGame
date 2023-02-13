@@ -7,7 +7,7 @@ import Home from './pages/Home/Home'
 import Game from './pages/Game/Game'
 
 
-const socket = io.connect("http://localhost:3001");
+const socket = io.connect("http://10.18.246.246:3001");
 function App() {
 
   const [userNo, setUserNo] = useState(0);

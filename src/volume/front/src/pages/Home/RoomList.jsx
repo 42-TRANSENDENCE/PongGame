@@ -83,7 +83,7 @@ const RoomList = (props) => {
 
       <div className='line'></div>
       <div className="creat_room">
-        <input type="text" placeholder="room name" />
+        <input type="text" required placeholder="room name" />
         <button className='create_room__botton' onClick={createNewRoom}>
           Create
         </button>

@@ -9,29 +9,19 @@
 }
 
 .game__body {
-  background: white;
-  height: calc(80vh - 160px);
-  aspect-ratio: 1.7;
-  position: relative;
+  background: grey;
+  width: 720px;
+  height: 420px;
+  position: relative; 
 }
 
-
-.game__body > canvas {
-  width: calc(100% - 10px);
-  height: calc(100% - 10px);
+.game__body canvas {
+  --left_padding: 10px;
+  --top_padding: 10px;
   position: absolute;
-  margin: 5px;
   border: none;
-  top : 0;
-  right: 0;
-}
-
-.canv_background {
-  background-color: rgb(27, 72, 83);
-}
-
-.canv_animate {
-  background: rgba(0,0,0,0);
+  top : var(--top_padding);
+  left: var(--left_padding);
 }
 
 .game__footer {

@@ -1,16 +1,22 @@
 import './Game.css'
-import React, {useEffect} from 'react'
-//import { io } from 'socket.io-client';
-
-const drawCanvas = () => {
-
-}
+import React, {useEffect, useRef} from 'react'
+import Canvas__background from './Canvas__background';
+import Canvas__foreground from './Canvas__foreground';
 
 const Game = ({props}) => {
   const socket = props;
 
+  const keyPressed = (e) => {
+      socket.emit("keypress", e.keyCode);
+  }
+  // 서버에 연결된 client의 정보를 주면 서버가 그 정보를 저장하고, broadcast하게 된다.
+  // 따라서 처음 인스턴스가 생길 때, 보내준다.
   useEffect ( () => {
-    socket.emit("test_emit", "안녕");
+    socket.emit("newPlayer", `${socket}`);
+    document.addEventListener('keydown', keyPressed);
+    return () => {
+      document.removeEventListener('keydown', keyPressed);
+    }
   }, [])
 
   return (
@@ -19,8 +25,8 @@ const Game = ({props}) => {
         HEADER
       </div>
       <div className='game__body'>
-        <canvas className='canv_background'></canvas>
-        <canvas className='canv_animate'></canvas>
+        {/* <Canvas__background width="700" height="400"/> */}
+        <Canvas__foreground socket={socket} width="700" height="400"/>
       </div>
       <div className='game__footer'>
         FOOTER

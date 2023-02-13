@@ -9,7 +9,7 @@ COMPOSE = ./src/docker-compose.yml
 .PHONY: up down restart clean re
 
 up :
-	@ echo -n "" > /home/dkim/.ssh/known_hosts
+	@ echo -n "" > ${HOME}/.ssh/known_hosts
 	@ docker compose -f $(COMPOSE) -p $(NAME) build
 	@ echo "=> $(G) build done $(E)";
 	@ docker image ls

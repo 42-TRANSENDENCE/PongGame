@@ -10,8 +10,7 @@ let userNo = 0;
 
 const io = new Server(server, {
   cors: {
-    origin: "http://localhost:3000",
-    methods: ["GET", "POST"]
+    origin: "http://10.18.246.246:3000",
   }
 });
 
@@ -19,6 +18,18 @@ server.listen(port, () => {
   console.log(`Server Listening to ${port}`)
 });
 
+const KEY_RIGHT = 39;
+const KEY_LEFT = 37;
+const KEY_UP = 38;
+const KEY_DOWN = 40;
+
+const TABLE_W = 700;
+const TABLE_H = 400;
+const BALL_RAD = 15;
+let x = TABLE_W / 2;
+let y = TABLE_H / 2;
+const dx = 1;
+const dy = 1;
 io.on("connection", (socket) => {
   if (userNo < 3) {
     userNo = userNo + 1;
@@ -29,9 +40,32 @@ io.on("connection", (socket) => {
       userNo = userNo - 1;
       console.log(`Disconnected : ${socket.id}, ${userNo}`)
     });
-  
-    socket.on("test_emit", (data) => {
-      console.log(data);
+    socket.on("newPlayer", (data) => {
+      console.log("new Player Join! : ", data);
+    });
+    socket.on("keypress", (keyCode) => {
+      console.log("key pressed!!, ", keyCode);
+      switch (keyCode) {
+        case KEY_RIGHT :
+          if (x < TABLE_W - BALL_RAD)
+            x = x + dx;
+          break;
+        case KEY_LEFT :
+          if (x > BALL_RAD)
+            x = x - dx;
+          break;
+        case KEY_UP :
+          if (y > BALL_RAD)
+            y = y - dy;
+          break;
+        case KEY_DOWN :
+          if (y < TABLE_H - BALL_RAD)
+            y = y + dy;
+          break;
+        default :
+          break;
+      }
+      io.emit("update", {x, y} )
     })
   } else {
     console.log(`Too Many Users : ${socket.id}`);
