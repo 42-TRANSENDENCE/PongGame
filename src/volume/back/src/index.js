@@ -49,21 +49,25 @@ io.on("connection", (socket) => {
         case KEY_RIGHT :
           if (x < TABLE_W - BALL_RAD)
             x = x + dx;
+          console.log("key update!!, ", x, y);
           io.emit("update", x, y )
           break;
         case KEY_LEFT :
           if (x > BALL_RAD)
             x = x - dx;
+          console.log("key update!!, ", x, y);
           io.emit("update", x, y )
           break;
         case KEY_UP :
           if (y > BALL_RAD)
             y = y - dy;
+          console.log("key update!!, ", x, y);
           io.emit("update", x, y )
           break;
         case KEY_DOWN :
           if (y < TABLE_H - BALL_RAD)
             y = y + dy;
+          console.log("key update!!, ", x, y);
           io.emit("update", x, y )
           break;
         default :

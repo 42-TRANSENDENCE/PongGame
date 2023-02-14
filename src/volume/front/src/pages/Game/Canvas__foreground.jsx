@@ -7,17 +7,16 @@ const Canvas__foreground = (props) => {
   const CANV_W = props.width;
   const CANV_H = props.height;
 
-  const ball_r = 15;
+  const ball_rad = 15;
   const [ballx, setBallX] = useState(CANV_W / 2);
   const [bally, setBallY] = useState(CANV_H / 2);
 
-  const draw_ball = (ctx, frameCount, x, y) => {
-    console.log(x, y);
-    const rad = ball_r + 2*Math.sin(frameCount*0.05)**2;
+  const draw_ball = (ctx, x, y) => {
+    console.log("draw", x, y);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
     ctx.fillStyle = '#ffffff'
     ctx.beginPath()
-    ctx.ellipse(x, y, rad, rad, 0, 0, 2*Math.PI);
+    ctx.ellipse(x, y, ball_rad, ball_rad, 0, 0, 2*Math.PI);
     ctx.fill()
   }
 
@@ -31,19 +30,7 @@ const Canvas__foreground = (props) => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     
-    let frameCount = 0
-    let animationFrameId
-
-    const render = () => {
-      animationFrameId = window.requestAnimationFrame(render);
-      frameCount++;
-      draw_ball(context, frameCount, ballx, bally);
-    }
-    render() 
-
-    return () => {
-      window.cancelAnimationFrame(animationFrameId)
-    }
+    draw_ball(context, ballx, bally);
   })
   
   return ( <canvas ref={canvasRef} width={CANV_W} height={CANV_H}/> );
