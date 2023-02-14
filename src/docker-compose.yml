@@ -1,20 +1,16 @@
 version: "3.8" 
 
 services:
-  base_cont:
-    container_name: base_cont
-    build: .
-    image: ubuntu:node_base
   frontend:
     container_name: front
     hostname: front
+    networks:
+      - pong_net
     build: ./frontend
     image: front:v1
     init: true
     tty: true
     stdin_open: true
-    depends_on:
-      - base_cont
     volumes:
       - ./volume/front:/root/front
     ports:
@@ -23,13 +19,13 @@ services:
   backend:
     container_name: back
     hostname: back
+    networks:
+      - pong_net
     image: back:v1
     build: ./backend
     init: true
     tty: true
     stdin_open: true
-    depends_on:
-      - base_cont
     volumes:
       - ./volume/back:/root/back
     ports:

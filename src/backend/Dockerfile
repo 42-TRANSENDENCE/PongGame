@@ -1,4 +1,4 @@
-FROM ubuntu:node_base
+FROM node_base:v1
 EXPOSE 22
 EXPOSE 3001
 
