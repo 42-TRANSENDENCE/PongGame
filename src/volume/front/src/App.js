@@ -7,6 +7,25 @@ import Home from './pages/Home/Home'
 import Game from './pages/Game/Game'
 
 
+const MainBody = ({socket, arg}) => {
+  if (arg === -1)
+    return (
+      <div>
+        <h1>Conncetion Refused</h1>
+        <h4>TOO MANY USERS</h4>
+      </div>
+    )
+  else
+    return (
+      <BrowserRouter>
+        <Routes>
+          {/* <Route path='/' element={<Home props={socket}/>}/> */}
+          <Route path='/' element={<Game props={socket}/>}/>
+        </Routes>
+      </BrowserRouter>
+    )
+}
+
 const socket = io.connect("http://localhost:3001");
 function App() {
 
@@ -14,30 +33,14 @@ function App() {
 
   useEffect ( () => {
     socket.on("enterance", (data) =>{
-      if (data === 0) {
-        alert(`TOO MANY USERS`);
-      } else {
-        setUserNo(data);
-      }
+      setUserNo(data);
     })
-  })
+  }, [])
 
   return (
     <div className="App">
       <div className="main__title" >Hello Pong</div>
-      {
-        (userNo === 0) ? (
-          <h2>TOO MANY USERS</h2>
-        ) : (
-          <BrowserRouter>
-            <Routes>
-              <Route path='/' element={<Home props={socket}/>}/>
-              <Route path='/game' element={<Game props={socket}/>}/>
-            </Routes>
-          </BrowserRouter>
-        )
-      }
-      
+      <MainBody arg={userNo} socket={socket}/>
       <div className='main__footer'>Hello Pong</div>
     </div>
   );

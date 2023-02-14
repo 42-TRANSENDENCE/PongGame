@@ -21,16 +21,16 @@ const Game = ({props}) => {
 
   return (
     <>
-      <div className='game__header'>
+      {/* <div className='game__header'>
         HEADER
-      </div>
+      </div> */}
       <div className='game__body'>
-        {/* <Canvas__background width="700" height="400"/> */}
+        <Canvas__background width="700" height="400"/>
         <Canvas__foreground socket={socket} width="700" height="400"/>
       </div>
-      <div className='game__footer'>
+      {/* <div className='game__footer'>
         FOOTER
-      </div>
+      </div> */}
     </>
   )
 }

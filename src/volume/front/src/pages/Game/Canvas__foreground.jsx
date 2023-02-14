@@ -8,30 +8,31 @@ const Canvas__foreground = (props) => {
   const CANV_H = props.height;
 
   const ball_rad = 15;
-  const [ballx, setBallX] = useState(CANV_W / 2);
-  const [bally, setBallY] = useState(CANV_H / 2);
+  const [ball_pos, setBallPos] = useState([(CANV_W / 2), (CANV_H / 2) ]);
 
-  const draw_ball = (ctx, x, y) => {
-    console.log("draw", x, y);
+  const draw_ball = (ctx, pos) => {
+    console.log("draw", pos[0], pos[1]);
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-    ctx.fillStyle = '#ffffff'
+    ctx.fillStyle = 'orange'
     ctx.beginPath()
-    ctx.ellipse(x, y, ball_rad, ball_rad, 0, 0, 2*Math.PI);
+    ctx.ellipse(pos[0], pos[1], ball_rad, ball_rad, 0, 0, 2*Math.PI);
     ctx.fill()
   }
-
-  const socket = props.socket;
-  socket.on("update", (x, y) => {
-    setBallX(x);
-    setBallY(y);
-  })
+  
   
   useEffect( () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
     
-    draw_ball(context, ballx, bally);
-  })
+    props.socket.on("update", (x, y) => {
+      console.log("update", x, y)
+      setBallPos([x, y]);
+      props.socket.off("update");
+    })
+    
+    draw_ball(context, ball_pos);
+  }, [ball_pos])
+
   
   return ( <canvas ref={canvasRef} width={CANV_W} height={CANV_H}/> );
 }
