@@ -20,6 +20,23 @@ const TABLE_H = 400;
 const GAP = 20; // ballrad : 15, padding : 5
 const VEL = 2;
 
+
+export function GameLogic( io, socket ) { 
+  console.log("new Player Join! : ");
+  let game_info = GameSetup();
+  
+  socket.on("keypress", (keyCode) => {
+    console.log("key pressed!!, ", keyCode);
+    game_info = handle_gameKey(keyCode, game_info);
+    io.emit("update", game_info);
+  }) ;
+  
+  setInterval( () => {
+    game_info = GameLoop( io, socket, game_info )
+    io.emit("update", game_info );
+  }, FREQUENCY)
+}
+
 function GameSetup( ) {
   return (
     {
@@ -31,31 +48,18 @@ function GameSetup( ) {
   );
 }
 
-export function GameLogic( io, socket ) { 
-  console.log("new Player Join! : ");
-  let game_info = GameSetup();
-
-  socket.on("keypress", (keyCode) => {
-    console.log("key pressed!!, ", keyCode);
-    game_info = handle_gameKey(keyCode, game_info);
-    io.emit("update", game_info);
-  }) ;
-  
-  setInterval( () => {
-    game_info = GameLoop( io, socket, game_info )
-    io.emit("update", game_info );
-  }, FREQUENCY)
-
-}
-
 function GameLoop ( server, socket, info ) {
   // 1. score check 
+
   // 2. check collidation
   info.vel = collid_check(info);
   
+  // 3. update info
   info.pos[0] += info.vel[0];
   info.pos[1] += info.vel[1];
   info.time += FREQUENCY;
+
+  // 4. return
   return info;
 }
 
@@ -83,16 +87,15 @@ function collid_check( info ) {
   return ([dx, dy]);
 }
 
- 
 
 // TODO : 키보드 입력을 처리할 떄, 매 입력마다 처리하는게 아니라 keydown 과 keyup을 함께 이용하여 
 // 서버 내부적으로 flag를 사용하면 통신 bandwidth를 줄일 수 있따. 유뷰트 3 참고하여 수정하기
 function handle_gameKey (keyCode, info) {
   // collid check
   let y = info.player[0];
-  if (keyCode === KEY_UP && y - 40 > GAP) // ballrad : 15, padding : 5
+  if (keyCode === KEY_UP && y - 40 > 5) // ballrad : 15, padding : 5
     y = y - 10;
-  else if (keyCode === KEY_DOWN && y  + 40 < TABLE_H - GAP) // ballrad : 15, padding : 5
+  else if (keyCode === KEY_DOWN && y  + 40 < TABLE_H - 5) // ballrad : 15, padding : 5
     y = y + 10;
   else
     return info;
