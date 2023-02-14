@@ -1,12 +1,17 @@
-const express = require("express");
+import * as game from "./gamelogic.js"
+
+// const express = require("express");
+import express from 'express'
+import http from 'http'
+import cors from 'cors'
+import {Server} from 'socket.io'
+
+import GAMELIST from "./game.json"  assert { type: "json" };
+import USERLIST from "./users.json" assert { type: "json" };
+
 const app = express();
 const port = 3001;
-const http = require("http");
-const cors = require("cors")
 const server = http.createServer(app);
-const { Server } = require("socket.io")
-const GAMELIST = require("./game.json")
-const USERLIST = require("./users.json")
 
 let userNo = 0;
 const MAXUSER = 2;
@@ -52,56 +57,19 @@ function connect_accept(socket) {
   userNo = userNo + 1;
   console.log(`Connected : ${socket.id}, ${userNo}`);
   socket.emit("enterance", userNo);
-  socket.emit("update", x, y );
 
   socket.on("disconnect", () => {
     userNo = userNo - 1;
     console.log(`Disconnected : ${socket.id}, ${userNo}`)
   });
 
+  /*                                */
+  /*                                */
+  /*              GAME              */
+  /*                                */
+  /*                                */
   socket.on("newPlayer", (data) => {
     console.log("new Player Join! : ", data);
-    
-    const animate_ball = setInterval(animate, 15);
-
-    let time = setTimeout(() => {
-      clearInterval(animate_ball);
-    }, 10000)
-    
+    game.GameLogic( io, socket );
   });
-
-  socket.on("keypress", (keyCode) => {
-    console.log("key pressed!!, ", keyCode);
-    handle_gameKey(keyCode);
-  }) ;    
-}
-
-
-// TODO : 키보드 입력을 처리할 떄, 매 입력마다 처리하는게 아니라 keydown 과 keyup을 함께 이용하여 
-// 서버 내부적으로 flag를 사용하면 통신 bandwidth를 줄일 수 있따. 유뷰트 3 참고하여 수정하기
-function handle_gameKey (keyCode) {
-  if (keyCode === KEY_RIGHT && x < TABLE_W - GAP) // ballrad : 15, padding : 5
-    x = x + vel;
-  else if (keyCode === KEY_LEFT && x > GAP) // ballrad : 15, padding : 5
-   x = x - vel;
-  else if (keyCode === KEY_UP && y > GAP) // ballrad : 15, padding : 5
-    y = y - vel;
-  else if (keyCode === KEY_DOWN && y < TABLE_H - GAP) // ballrad : 15, padding : 5
-    y = y + vel;
-  else
-    return;
-  console.log("key update!!, ", x, y);
-  io.emit("update", x, y );
-  return; 
-}
-
-function animate(){
-  if (x < GAP || x > TABLE_W - GAP) // ballrad : 15, padding : 5
-    dx = -dx;
-  if (y < GAP || y > TABLE_H - GAP) // ballrad : 15, padding : 5
-    dy = -dy;;
-  
-  x += dx;
-  y += dy;
-  io.emit("update", x, y );
 }
