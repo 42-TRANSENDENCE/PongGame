@@ -31,5 +31,10 @@ multi-player web pong game.
 - [ ] 여러개의 게임 채널 구현
 - [ ] 관전 가능 여부 구현
 - [ ] 키보드 이벤트 처리 최적화
-## TypeScript
+## TypeScript & React
 #### Goal (~미정)
+- [ ] 다시 공부
+- [ ] TypeScript로 코드 다시 작성
+# Refactoring
+#### Goal (미정~)
+- [ ] DB, backend와 합치기
