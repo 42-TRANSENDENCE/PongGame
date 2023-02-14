@@ -35,6 +35,6 @@ multi-player web pong game.
 #### Goal (~미정)
 - [ ] 다시 공부
 - [ ] TypeScript로 코드 다시 작성
-# Refactoring
+## Refactoring
 #### Goal (미정~)
 - [ ] DB, backend와 합치기
