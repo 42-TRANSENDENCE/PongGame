@@ -1,5 +1,13 @@
 # PongGame
-multi-player web pong game
+multi-player web pong game.  
+
+<p align="center">
+ <img width="500" alt="image" src="https://user-images.githubusercontent.com/60467872/218838147-fe3fc0f1-b246-4a90-bbf6-7c8f14b73a04.png">  
+</p>  
+<p align="center">
+ <em>sample image</em>
+</p>  
+
 
 1. ```make```
 2. 각 컨테이너에 접속  
