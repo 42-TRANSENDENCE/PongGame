@@ -10,7 +10,7 @@ let userNo = 0;
 
 const io = new Server(server, {
   cors: {
-    origin: "http://10.18.246.246:3000",
+    origin: "http://localhost:3000",
   }
 });
 
@@ -49,23 +49,26 @@ io.on("connection", (socket) => {
         case KEY_RIGHT :
           if (x < TABLE_W - BALL_RAD)
             x = x + dx;
+          io.emit("update", x, y )
           break;
         case KEY_LEFT :
           if (x > BALL_RAD)
             x = x - dx;
+          io.emit("update", x, y )
           break;
         case KEY_UP :
           if (y > BALL_RAD)
             y = y - dy;
+          io.emit("update", x, y )
           break;
         case KEY_DOWN :
           if (y < TABLE_H - BALL_RAD)
             y = y + dy;
+          io.emit("update", x, y )
           break;
         default :
           break;
       }
-      io.emit("update", {x, y} )
     })
   } else {
     console.log(`Too Many Users : ${socket.id}`);
