@@ -1,0 +1,14 @@
+{
+    "user1": {
+        "id" : "#USER1",
+        "connected": false
+    },
+    "user2": {
+        "id" : "#USER2",
+        "connected": false
+    },
+    "user3": {
+        "id" : "#USER3",
+        "connected": false
+    }
+}

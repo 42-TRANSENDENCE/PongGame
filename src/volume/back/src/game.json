@@ -1,0 +1,29 @@
+{
+  "game1": {
+    "id": "#game1",
+    "watch_allowed": true,
+    "allowed_player": {
+      "p1": "#USER1",
+      "p2": "#USER2"
+    },
+    "connected_player": 0
+  },
+  "game2": {
+    "id": "#game1",
+    "watch_allowed": true,
+    "allowed_player": {
+      "p1": "#USER3",
+      "p2": "#USER4"
+    },
+    "connected_player": 0
+  },
+  "game3": {
+    "id": "#game3",
+    "watch_allowed": true,
+    "allowed_player": {
+      "p1": "#USER5",
+      "p2": "#USER6"
+    },
+    "connected_player": 0
+  }
+}
