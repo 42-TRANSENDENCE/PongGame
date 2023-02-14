@@ -9,7 +9,7 @@ multi-player web pong game
    ```back/src/index.js```와 ```front/src/App.js```에서 ```localhost```를 _local ip_ 로 바꿔야 외부의 같은 네트워크에서 접속 가능함
 ***
 
-#TODO
+# TODO
 ## NinjaCode
 #### Goal (~2/19)
 - [x] ~서버에서 공 위치 계산~ (2/15)
