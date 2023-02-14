@@ -8,4 +8,20 @@ multi-player web pong game
 4. localhost:3000으로 접속  
    ```back/src/index.js```와 ```front/src/App.js```에서 ```localhost```를 _local ip_ 로 바꿔야 외부의 같은 네트워크에서 접속 가능함
 ***
-[TODO](https://github.com/42-TRANSENDENCE/PongGame/blob/main/src/Readme.md)
+
+#TODO
+## NinjaCode
+#### Goal (~2/19)
+- [x] ~서버에서 공 위치 계산~
+- [x] ~클라이언트의 키보드 입력 서버로 전송~
+- [x] ~클러이언트로부터 받은 키 입력에 따라 패들 위치 계산~
+- [x] ~공과 패들 위치 서버에서 해당 소켓에 연결된 모든 클라이언트에 전송~
+- [x] ~벽이나 패들과 공의 충돌 처리~
+- [ ] 새로고침시 정보가 중복되지 않게 함
+- [ ] Scoring 구현 및 점수 표시
+- [ ] 하나의 개임 채널 후 들어올 수 있는 사람 제한하는 기능 구현
+- [ ] 여러개의 게임 채널 구현
+- [ ] 관전 가능 여부 구현
+- [ ] 키보드 이벤트 처리 최적화
+## TypeScript
+#### Goal (~미정)
