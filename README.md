@@ -37,4 +37,5 @@ multi-player web pong game.
 - [ ] TypeScript로 코드 다시 작성
 ## Refactoring
 #### Goal (미정~)
+- [ ] React function component를 class component로 변경
 - [ ] DB, backend와 합치기
