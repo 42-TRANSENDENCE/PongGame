@@ -30,11 +30,21 @@ const socket = io.connect("http://localhost:3001");
 function App() {
 
   const [userNo, setUserNo] = useState(0);
+  // const [roomNo, setRoomNo] = useState(-1);
 
+  function handleEnterance (data) {
+    console.log("userno : ", data);
+    setUserNo(data);
+  };
+  function handleKeyCheck (keycode) {
+    console.log("keycheck : ", keycode)
+  }
   useEffect ( () => {
-    socket.on("enterance", (data) =>{
-      setUserNo(data);
-    })
+    socket.on("enterance", handleEnterance);
+    socket.on("key_check", handleEnterance);
+    return () => {
+      socket.off("enterance", handleEnterance);
+    }
   }, [])
 
   return (

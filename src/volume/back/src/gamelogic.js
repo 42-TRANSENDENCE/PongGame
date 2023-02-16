@@ -1,4 +1,3 @@
-
 // ball_pos : { x: x y: y}
 // p1_y : y 
 // p2_y : y 
@@ -21,19 +20,19 @@ const GAP = 20; // ballrad : 15, padding : 5
 const VEL = 2;
 
 
-export function GameLogic( io, socket ) { 
+export function GameLogic( io, socket, roomid ) { 
   console.log("new Player Join! : ");
   let game_info = GameSetup();
   
   socket.on("keypress", (keyCode) => {
     console.log("key pressed!!, ", keyCode);
     game_info = handle_gameKey(keyCode, game_info);
-    io.emit("update", game_info);
+    io.to(roomid).emit("update", game_info);
   }) ;
   
   setInterval( () => {
     game_info = GameLoop( io, socket, game_info )
-    io.emit("update", game_info );
+    io.to(roomid).emit("update", game_info );
   }, FREQUENCY)
 }
 
