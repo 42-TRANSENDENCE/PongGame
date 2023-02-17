@@ -25,20 +25,7 @@ server.listen(port, () => {
   console.log(`Server Listening to ${port}`)
 });
 
-const TABLE_W = 700;
-const TABLE_H = 400;
-const GAP = 20; // ballrad : 15, padding : 5
-let x = TABLE_W / 2;
-let y = TABLE_H / 2;
-const vel = 5;
-let dx = vel / 2;
-let dy = vel / 2;
-
-
-
 io.on("connection", handle_connection);
-// console.log(GAMELIST);
-// console.log(USERLIST);
 
 function handle_connection(socket) {
   (user_count < MAXUSER) ? connect_accept(socket) : connect_refuse(socket)
@@ -53,10 +40,8 @@ let user_count = 0;
 const MAXUSER = 6;
 let PlayerInfos ={}; // 전체 접속한 플레이어이다.
 let GameInfos = {}; // 생성된 게임의 정보이다.
-let i = 0;
 
-// const FRAME = 50;
-const FREQUENCY = 15;
+const FREQUENCY = 15; // ~= 1000 / 60
 setInterval(loop, FREQUENCY);
 function connect_accept(socket) {
   // socket listenter
@@ -79,6 +64,7 @@ function connect_accept(socket) {
   } else {
     PlayerInfos[socket.id] = {room: roomNo, position: "right"}
     GameInfos[roomNo] = { 
+                          ongame  : true,
                           ball    : [0, 0],
                           rad     : BALL_RAD,
                           vel     : [5, 5],
@@ -103,7 +89,6 @@ const PADDLE_H = 160;
 const PADDLE_W = 8;
 const PADDLE_L = 40;
 const PADDLE_R = 40;
-let time = 0
 
 function loop() {
   gameloop();
@@ -115,6 +100,8 @@ function gameloop () {
     const game = GameInfos[i];
     if (game === undefined)
       console.log("wating for player2");
+    else if (game.ongame === false) 
+      continue;
     else {
       GameInfos[i] = game_single_frame(game)
       io.to(i).emit("update", GameInfos[i]);
@@ -173,8 +160,15 @@ function collid_check( game ) {
 
 function handle_gameKey(game, keyCode) {
 
-  if (GameInfos[game.room] === undefined)
+  if ( !game || !game.room || !GameInfos[game.room]){
+    console.log("undefined")
     return ;
+  }
+  if (keyCode === 32) {
+    console.log("space")
+    GameInfos[game.room].ongame = !(GameInfos[game.room].ongame);
+    return;
+  }
 
   if (game.position === "left") {
     if ( keyCode === KEY_UP &&

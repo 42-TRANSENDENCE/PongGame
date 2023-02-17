@@ -14,4 +14,5 @@ WORKDIR	/root/front
 RUN	echo "root:0000" | chpasswd
 
 ENTRYPOINT ["bash", "/yarn.sh"]
+RUN service ssh start
 CMD ["/usr/sbin/sshd", "-D"]

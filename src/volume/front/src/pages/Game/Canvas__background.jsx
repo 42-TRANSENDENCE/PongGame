@@ -6,7 +6,7 @@ const Canvas__background = (props) => {
   const CANV_W = props.width;
   const CANV_H = props.height;
 
-  const draw = (table_ctx) => {
+  const draw_table = (table_ctx) => {
     const W = table_ctx.canvas.width;
     const H = table_ctx.canvas.height;
     const P = 5;
@@ -37,7 +37,10 @@ const Canvas__background = (props) => {
   useEffect( () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    draw(context);
+    // props.socket.on("score_update", (score) => {
+    //   draw_score(context, score);
+    // })
+    draw_table(context);
   }, []);
 
   return ( <canvas ref={canvasRef} width={CANV_W} height={CANV_H}/> );

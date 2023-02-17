@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useRef} from 'react'
 
 
-
 const Canvas__foreground = (props) => {
   const socket = props.socket;
   const CANV_RATIO = props.width / 1200;
@@ -14,41 +13,29 @@ const Canvas__foreground = (props) => {
   const PADDLE_L = PADDLE_W * 5;
   const PADDLE_R = CANV_W - PADDLE_L;
 
-
   const canvasRef = useRef(null);
-  const [pos_info, setPosInfo] = useState({
-    ball: [CANV_W / 2,  CANV_H / 2], 
-    rad : RAD,
-    vel: [0, 0],
-    paddle: [CANV_H / 2, CANV_H / 2],
-    score: [0, 0]
-  });  
   
   useEffect( () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    
+    const first_location = {
+      ball: [0,0], 
+      rad : 30,
+      vel: [0, 0],
+      paddle: [0, 0],
+      score: [0, 0]
+    }
     props.socket.on("update", (all_pos_info) => {
-      setPosInfo(all_pos_info);
       draw_all(context, all_pos_info);
     })
+    socket.on("game", (data) => { console.log("game??", data); })
+    draw_all(context, first_location);
 
-    socket.on("game", (data) => {
-      console.log("ganme??", data);
-    })
-  }, [pos_info])
-
-  function convert_info(info) {
-    let new_info = info;
-    new_info.ball[0] = info.ball[0] * CANV_RATIO + CANV_W / 2;
-    new_info.ball[1] = info.ball[1] * CANV_RATIO + CANV_H / 2;
-    new_info.rad    = info.rad    * CANV_RATIO;
-    new_info.vel[0] = info.vel[0] * CANV_RATIO;
-    new_info.vel[1] = info.vel[1] * CANV_RATIO;
-    new_info.paddle[0] = info.paddle[0] * CANV_RATIO + CANV_H / 2;
-    new_info.paddle[1] = info.paddle[1] * CANV_RATIO + CANV_H / 2;
-    return new_info;
-  }
+    return () => {
+      props.socket.off("update");
+      props.socket.off("game");
+    }
+  }, [])
 
   return ( 
     <>
@@ -71,10 +58,6 @@ const Canvas__foreground = (props) => {
   }
 
   function draw_ball( ctx, center, rad, color ) {
-
-
-
-
     ctx.fillStyle = color;
     ctx.beginPath()
     ctx.ellipse(
