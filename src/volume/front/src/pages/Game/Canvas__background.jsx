@@ -37,10 +37,13 @@ const Canvas__background = (props) => {
   useEffect( () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext('2d');
-    // props.socket.on("score_update", (score) => {
-    //   draw_score(context, score);
-    // })
+    props.socket.on("update_score", (score) => {
+      console.log(score);
+    });
     draw_table(context);
+    return () => {
+    props.socket.off("update_score")
+    }
   }, []);
 
   return ( <canvas ref={canvasRef} width={CANV_W} height={CANV_H}/> );

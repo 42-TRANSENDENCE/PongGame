@@ -1,5 +1,5 @@
 import './Game.css'
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useEffect } from 'react'
 import Canvas__background from './Canvas__background';
 import Canvas__foreground from './Canvas__foreground';
 
@@ -9,13 +9,10 @@ const Game = ({props}) => {
   const canv_width = "600";
   const canv_height = "400";
 
-    // const keyPressed = useCallback((e) => {
-    //   socket.emit("keypress", game_basic_info, e.keyCode);
-    // }, [game_basic_info])
-    const keyPressed = (e) => {
-      console.log(game_basic_info);
-      socket.emit("keypress", game_basic_info, e.keyCode);
-    }
+  const keyPressed = (e) => {
+    console.log(game_basic_info);
+    socket.emit("keypress", game_basic_info, e.keyCode);
+  }
     
   // 서버에 연결된 client의 정보를 주면 서버가 그 정보를 저장하고, broadcast하게 된다.
   // 따라서 처음 인스턴스가 생길 때, 보내준다.
@@ -37,6 +34,7 @@ const Game = ({props}) => {
       <div className='game__body'>
         <div className='game__body_topbar'>TOPBAR</div>
         <Canvas__background 
+          socket={socket}
           width={canv_width}
           height={canv_height}
         />

@@ -1,6 +1,3 @@
-import * as game from "./gamelogic.js"
-
-// const express = require("express");
 import express from 'express'
 import http from 'http'
 import cors from 'cors'
@@ -21,9 +18,7 @@ const io = new Server(server, {
   }
 });
 
-server.listen(port, () => {
-  console.log(`Server Listening to ${port}`)
-});
+server.listen(port, () => { console.log(`Server Listening to ${port}`) });
 
 io.on("connection", handle_connection);
 
@@ -41,7 +36,7 @@ const MAXUSER = 6;
 let PlayerInfos ={}; // 전체 접속한 플레이어이다.
 let GameInfos = {}; // 생성된 게임의 정보이다.
 
-const FREQUENCY = 15; // ~= 1000 / 60
+const FREQUENCY = 16; // ~= 1000 / 60
 setInterval(loop, FREQUENCY);
 function connect_accept(socket) {
   // socket listenter
@@ -52,7 +47,6 @@ function connect_accept(socket) {
   });
 
   socket.on("keypress", handle_gameKey);
-
 
   // accept function
   user_count = user_count + 1;
@@ -67,7 +61,7 @@ function connect_accept(socket) {
                           ongame  : true,
                           ball    : [0, 0],
                           rad     : BALL_RAD,
-                          vel     : [5, 5],
+                          vel     : [6, 4.5],
                           paddle  : [0, 0],
                           score   : [0, 0]
                         }
@@ -75,8 +69,6 @@ function connect_accept(socket) {
   }
   socket.emit("game_enter", PlayerInfos[socket.id]);
 }
-
-
 
 const KEY_UP = 38;
 const KEY_DOWN = 40;
@@ -94,28 +86,42 @@ function loop() {
   gameloop();
 }
 
+/*-----------------------------------------*/
+/*                  GAME                   */
+/*-----------------------------------------*/
 function gameloop () {
-
-  for (let i = 1 ; i <= user_count / 2; i++ ) {
-    const game = GameInfos[i];
+  for (let room_no = 1 ; room_no <= user_count / 2; room_no++ ) {
+    const game = GameInfos[room_no];
     if (game === undefined)
       console.log("wating for player2");
     else if (game.ongame === false) 
       continue;
-    else {
-      GameInfos[i] = game_single_frame(game)
-      io.to(i).emit("update", GameInfos[i]);
-    }
+    else 
+      GameInfos[room_no] = game_single_frame(io, room_no, game)
   }
 }
 
-function game_single_frame(game) {
+function game_single_frame(io, room_no, game) {
   game.vel = collid_check(game);
+  game.score = score_check(io, room_no, game.ball, game.score)
 
-  game.ball[0] += game.vel[0];
+  game.ball[0] += game.vel[0];  
   game.ball[1] += game.vel[1];  
-
+  io.to(room_no).emit("update_ball", GameInfos[room_no].ball, 
+                                     GameInfos[room_no].rad, 
+                                     GameInfos[room_no].paddle);
   return game;
+}
+
+function score_check(io, room_no, ball, score) {
+  if (ball[0] <= TABLE_LEFT + BALL_RAD)
+    score[1] += 1;
+  else if (ball[0] >= TABLE_RIGHT - BALL_RAD)
+    score[0] += 1;
+  else
+    return score;
+  io.to(room_no).emit("update_score", score);
+  return score;
 }
 
 function collid_check( game ) {
@@ -192,6 +198,5 @@ function handle_gameKey(game, keyCode) {
        GameInfos[game.room].paddle[1] += 30;
   }
 
-
-  io.to(game.room).emit("update",  GameInfos[game.room]);
+  // io.to(game.room).emit("update_ball", GameInfos[game.room].ball, GameInfos[game.room].rad, GameInfos[game.room].paddle);
 }
