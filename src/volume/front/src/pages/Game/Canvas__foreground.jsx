@@ -30,7 +30,7 @@ const Canvas__foreground = (props) => {
       redraw_ball (
         context,
         [game_position_info.ball, game_position_info.rad],
-        [ball, rad, 'orange'] );
+        [ball, rad, 'wheat'] );
       redraw_paddle (
         context,
         [PADDLE_L, game_position_info.paddle[0]],

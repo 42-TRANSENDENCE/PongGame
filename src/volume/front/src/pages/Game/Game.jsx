@@ -6,8 +6,8 @@ import Canvas__foreground from './Canvas__foreground';
 const Game = ({props}) => {
   const socket = props;
   let game_basic_info = null;
-  const canv_width = "600";
-  const canv_height = "400";
+  const canv_width = "1800";
+  const canv_height = "1200";
 
   const keyPressed = (e) => {
     console.log(game_basic_info);
