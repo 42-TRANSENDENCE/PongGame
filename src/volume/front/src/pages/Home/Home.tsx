@@ -1,8 +1,7 @@
 import './Home.css'
-import React, {useState} from 'react'
 import RoomList from './RoomList';
 
-const Home = (props) => {
+const Home = (props : any) : JSX.Element => {
   const {socket} = props;
 
   //const createNewRoom = () => {

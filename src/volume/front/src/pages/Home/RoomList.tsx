@@ -1,9 +1,9 @@
 import './Home.css'
-import React, { useState, useEvent } from 'react'
+import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 
-const RoomList = (props) => {
-  const {socket} = props;
+const RoomList = (props : any) : JSX.Element => {
+  const {socket} : any = props;
   const [roomlist, setRoomList] = useState([ 
     {
       id: "#1234",
@@ -54,8 +54,8 @@ const RoomList = (props) => {
                         <button >Join</button>
                       </Link>
                     ) : (
-                      <Link className='joinbutton'>
-                        <button diabled>Full</button>
+                      <Link to='/' className='joinbutton'>
+                        <button disabled>Full</button>
                       </Link>
                     )
                 }
@@ -70,7 +70,7 @@ const RoomList = (props) => {
                         <button >Join</button>
                       </Link>
                     ) : (
-                      <Link className='joinbutton'>
+                      <Link to='/' className='joinbutton'>
                         <button disabled>Full</button>
                       </Link>
                     )

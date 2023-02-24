@@ -3,13 +3,13 @@ import React, { useEffect } from 'react'
 import Canvas__background from './Canvas__background';
 import Canvas__foreground from './Canvas__foreground';
 
-const Game = ({props}) => {
+const Game = ({props} : any) : JSX.Element => {
   const socket = props;
-  let game_basic_info = null;
+  let game_basic_info : any = null;
   const canv_width = "1800";
   const canv_height = "1200";
 
-  const keyPressed = (e) => {
+  const keyPressed = (e : any) => {
     console.log(game_basic_info);
     socket.emit("keypress", game_basic_info, e.keyCode);
   }
@@ -18,7 +18,7 @@ const Game = ({props}) => {
   // 따라서 처음 인스턴스가 생길 때, 보내준다.
   useEffect ( () => {
     // RoomNo와 패들 위치(left rigth)에 대한 정보를 받는다.
-    socket.on("game_enter", (info) => { 
+    socket.on("game_enter", (info : any) => { 
       game_basic_info = info;
       console.log("none ", game_basic_info);
     })

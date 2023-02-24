@@ -1,7 +1,7 @@
 import React, { useEffect, useRef} from 'react'
 
 
-const Canvas__foreground = (props) => {
+const Canvas__foreground = (props : any) : JSX.Element => {
   const socket = props.socket;
   const CANV_RATIO = props.width / 1200;
   
@@ -23,10 +23,10 @@ const Canvas__foreground = (props) => {
   }
   
   useEffect( () => {
-    const canvas = canvasRef.current;
+    const canvas : any= canvasRef.current;
     const context = canvas.getContext('2d');
 
-    socket.on("update_ball", (ball, rad, paddle) => {
+    socket.on("update_ball", (ball : any, rad : number, paddle : any) => {
       redraw_ball (
         context,
         [game_position_info.ball, game_position_info.rad],
@@ -47,7 +47,7 @@ const Canvas__foreground = (props) => {
       game_position_info.rad = rad;
       game_position_info.paddle = paddle;
     })
-    socket.on("game", (data) => { console.log("game??", data); })
+    socket.on("game", (data : any) => { console.log("game??", data); })
 
     return () => {
       props.socket.off("update_ball");
@@ -62,7 +62,7 @@ const Canvas__foreground = (props) => {
     </>
   );
 
-  function redraw_ball( ctx, old_info, new_info ) {
+  function redraw_ball( ctx : any , old_info:any, new_info:any ) {
     const old_x = old_info[0][0] * CANV_RATIO + CANV_W / 2;
     const old_y = old_info[0][1] * CANV_RATIO + CANV_H / 2;
     const old_r = old_info[1] * CANV_RATIO + 1;
@@ -76,7 +76,7 @@ const Canvas__foreground = (props) => {
     ctx.fill();
   }
 
-  function redraw_paddle(ctx, old_center, new_center, color) {
+  function redraw_paddle(ctx:any, old_center:any, new_center:any, color:any) {
     // erase old paddle
 
     const old_x = old_center[0];

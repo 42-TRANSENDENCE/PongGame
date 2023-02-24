@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react'
+//import React, {useEffect, useState}, from 'react'
+import * as React from 'react'
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-import io from 'socket.io-client'
+import {io, Socket} from 'socket.io-client'
 
 import './App.css';
 import Home from './pages/Home/Home'
 import Game from './pages/Game/Game'
 
 
-const MainBody = ({socket, arg}) => {
+const MainBody = ({socket, arg} : any) : JSX.Element => {
   if (arg === -1)
     return (
       <div>
@@ -26,17 +27,17 @@ const MainBody = ({socket, arg}) => {
     )
 }
 
-const socket = io.connect("http://localhost:3001");
-function App() {
+const socket = io("http://localhost:3001");
+function App() : JSX.Element {
 
-  const [userNo, setUserNo] = useState(0);
+  const [userNo, setUserNo] = React.useState(0);
 
-  function handleEnterance (data) {
+  function handleEnterance (data : any) {
     console.log("userno : ", data);
     setUserNo(data);
   };
 
-  useEffect ( () => {
+  React.useEffect ( () => {
     socket.on("enterance", handleEnterance);
     socket.on("key_check", handleEnterance);
     return () => {

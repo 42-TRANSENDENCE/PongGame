@@ -1,15 +1,16 @@
 import './Game.css'
 import React, {useEffect, useRef} from 'react'
+import { JsxEmit } from 'typescript';
 
-const Canvas__background = (props) => {
+const Canvas__background = (props : any) : JSX.Element => {
   const canvasRef = useRef(null);
-  const CANV_W = props.width;
-  const CANV_H = props.height;
+  const CANV_W : number = props.width;
+  const CANV_H : number = props.height;
 
-  const draw_table = (table_ctx) => {
-    const W = table_ctx.canvas.width;
-    const H = table_ctx.canvas.height;
-    const P = 5;
+  const draw_table = (table_ctx : any) => {
+    const W : number = table_ctx.canvas.width;
+    const H : number = table_ctx.canvas.height;
+    const P : number = 5;
     table_ctx.fillStyle = '#333333';
     table_ctx.fillRect(0, 0, W, H);
 
@@ -40,14 +41,14 @@ const Canvas__background = (props) => {
   };
 
   useEffect( () => {
-    const canvas = canvasRef.current;
-    const context = canvas.getContext('2d');
-    props.socket.on("update_score", (score) => {
+    const canvas : any = canvasRef.current;
+    const context : any = canvas.getContext('2d');
+    props.socket.on("update_score", (score : any) => {
       draw_score(context, score);
     });
     draw_table(context);
-    const a = 5;
-    const b = 2;
+    const a : number = 5;
+    const b : number = 2;
     draw_score(context, [0,0])
     
 
@@ -56,10 +57,10 @@ const Canvas__background = (props) => {
     }
   }, []);
 
-  function draw_score(table_ctx, scores) {
-    const W = table_ctx.canvas.width;
-    const H = table_ctx.canvas.height;
-    const P = 10;
+  function draw_score(table_ctx : any, scores : any) {
+    const W : number = table_ctx.canvas.width;
+    const H : number = table_ctx.canvas.height;
+    const P : number = 10;
     table_ctx.fillStyle = '#333333';
     table_ctx.fillRect(P, P, W/2 - 3*P, H - 2*P);
     table_ctx.fillRect(W/2 + 3*P, P, W/2 - 6*P, H - 2*P);
