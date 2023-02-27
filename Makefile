@@ -10,7 +10,7 @@ COMPOSE = ./src/docker-compose.yml
 
 up :
 	@ echo "${G} =>  reset ssh host info${E}"
-	@ echo -n "" > ${HOME}/.ssh/known_hosts
+	@ echo  "" > ${HOME}/.ssh/known_hosts
 	@ echo "${G} =>  building base image ${E}"
 	@ docker build -t node_base:v1 ./src
 	@ docker compose -f $(COMPOSE) -p $(NAME) build
