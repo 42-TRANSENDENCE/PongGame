@@ -2,8 +2,7 @@ import './Home.css'
 import React, { useState } from 'react'
 import { Link } from 'react-router-dom';
 
-const RoomList = (props : any) : JSX.Element => {
-  const {socket} : any = props;
+const RoomList = ( ) : JSX.Element => {
   const [roomlist, setRoomList] = useState([ 
     {
       id: "#1234",
@@ -27,7 +26,6 @@ const RoomList = (props : any) : JSX.Element => {
     console.log("make new room clicked");
   }
 
-  //useEvent ()
   return (
     <div className='room_list__container'>
       

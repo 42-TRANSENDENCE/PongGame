@@ -11,6 +11,7 @@ RUN	apt-get update && \
     curl -fsSL https://deb.nodesource.com/setup_lts.x | bash - && \
     apt-get update && apt-get install -y nodejs && \
     npm install -g yarn
+
 # code-server및 extension설치
 #RUN	curl -fsSL https://code-server.dev/install.sh | sh && \
 #    code-server --install-extension dsznajder.es7-react-js-snippets

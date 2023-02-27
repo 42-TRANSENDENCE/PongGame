@@ -1,78 +1,96 @@
 import './Game.css'
-import React, {useEffect, useRef} from 'react'
-import { JsxEmit } from 'typescript';
+import {useEffect, useRef} from 'react'
+
+interface CanvasProps {
+  context: CanvasRenderingContext2D;
+  width: number;
+  height: number;
+  padding: number;
+  color: string
+}
+
+interface ScoreProps {
+  p1 : number;
+  p2 : number;
+}
 
 const Canvas__background = (props : any) : JSX.Element => {
-  const canvasRef = useRef(null);
-  const CANV_W : number = props.width;
-  const CANV_H : number = props.height;
-
-  const draw_table = (table_ctx : any) => {
-    const W : number = table_ctx.canvas.width;
-    const H : number = table_ctx.canvas.height;
-    const P : number = 5;
-    table_ctx.fillStyle = '#333333';
-    table_ctx.fillRect(0, 0, W, H);
-
-    table_ctx.beginPath();
-    table_ctx.lineWidth = 1;
-    table_ctx.strokeStyle = 'red';
-    table_ctx.moveTo(P, P);
-    table_ctx.lineTo(W - P, P);
-    table_ctx.lineTo(W - P, H - P);
-    table_ctx.lineTo(P, H - P);
-    table_ctx.lineTo(P, P);
-    table_ctx.closePath();
-    table_ctx.stroke();
-
-    table_ctx.beginPath();
-    table_ctx.setLineDash([H / 83]);
-    table_ctx.lineWidth = 1;
-    table_ctx.strokeStyle = 'white';
-    table_ctx.moveTo(W / 2, 0);
-    table_ctx.lineTo(W / 2, H);
-    table_ctx.stroke();
-    table_ctx.setLineDash([]);
-    table_ctx.font = "320px Arial";
-    table_ctx.textBaseline = "middle"
-    table_ctx.textAlign = "center"
-    table_ctx.strokeStyle = "wheat"
-    table_ctx.strokeText(`:`, CANV_W / 2 , CANV_H * 0.5)
-  };
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const W : number = props.width;
+  const H : number = props.height;
+  const P : number = H / 10;
+  const color : string = props.color;
 
   useEffect( () => {
     const canvas : any = canvasRef.current;
-    const context : any = canvas.getContext('2d');
-    props.socket.on("update_score", (score : any) => {
-      draw_score(context, score);
+    const context : CanvasRenderingContext2D = canvas.getContext('2d');
+    props.socket.on("update_score", (score : Array<number>) => {
+      draw_score({context: context, width: W, height: H, padding: P, color: color}, {p1:score[0], p2:score[1]});
     });
-    draw_table(context);
-    const a : number = 5;
-    const b : number = 2;
-    draw_score(context, [0,0])
-    
-
+    draw_table({context: context, width: W, height: H, padding: P, color: color});
+    draw_score({context: context, width: W, height: H, padding: P, color: color}, {p1:0, p2:0})
     return () => {
       props.socket.off("update_score")
     }
   }, []);
 
-  function draw_score(table_ctx : any, scores : any) {
-    const W : number = table_ctx.canvas.width;
-    const H : number = table_ctx.canvas.height;
-    const P : number = 10;
-    table_ctx.fillStyle = '#333333';
-    table_ctx.fillRect(P, P, W/2 - 3*P, H - 2*P);
-    table_ctx.fillRect(W/2 + 3*P, P, W/2 - 6*P, H - 2*P);
-    table_ctx.fillStyle = "grey";
-    table_ctx.font = "300px Arial";
-    table_ctx.strokeStyle = ""
-    table_ctx.strokeText(`${scores[0]}    ${scores[1]}`, CANV_W / 2 , CANV_H * 0.52)
-    table_ctx.fillText(`${scores[0]}    ${scores[1]}`, CANV_W / 2 , CANV_H * 0.52)
-  }
-
-  return ( <canvas ref={canvasRef} width={CANV_W} height={CANV_H}/> );
+  return ( 
+    <canvas ref={canvasRef} width={W} height={H}/>
+  );
 }
 
+export default Canvas__background;
 
-export default Canvas__background
+/*=============================================*/
+/*                                             */
+/*                  functions                  */
+/*                                             */
+/*=============================================*/
+                        
+const draw_table = ( {context, width, height, padding, color} : CanvasProps ) => {
+  const W = width;
+  const H = height;
+  const P = padding;
+  context.fillStyle = '#333333';
+  context.fillRect(0, 0, W, H);
+
+  context.beginPath();
+  context.setLineDash([H / 42]);
+  context.lineWidth = P / 25;
+  context.strokeStyle = color;
+  context.moveTo(P, P);
+  context.lineTo(W - P, P);
+  context.lineTo(W - P, H - P);
+  context.lineTo(P, H - P);
+  context.lineTo(P, P);
+  context.closePath();
+  context.stroke();
+
+  context.beginPath();
+  context.setLineDash([H / 83]);
+  context.lineWidth = 1;
+  context.strokeStyle = 'white';
+  context.moveTo(W / 2, 0);
+  context.lineTo(W / 2, H);
+  context.stroke();
+  context.setLineDash([]);
+  context.font = "320px Arial";
+  context.textBaseline = "middle"
+  context.textAlign = "center"
+  context.strokeStyle = "wheat"
+  context.strokeText(`:`, W / 2 , H * 0.5)
+};
+
+function draw_score({context, width, height, padding} : CanvasProps, scores : ScoreProps) {
+  const W = width;
+  const H = height;
+  const P = padding;
+  context.fillStyle = '#333333';
+  context.fillRect(P*3    , P * 3, W/2 - 4*P, H - 6*P);
+  context.fillRect(W/2 + P, P * 3, W/2 - 4*P, H - 6*P);
+  context.fillStyle = "grey";
+  context.font = "300px Arial";
+  context.strokeStyle = ""
+  context.strokeText(`${scores.p1}    ${scores.p2}`, W / 2 , H * 0.52)
+  context.fillText(`${scores.p1}    ${scores.p2}`, W / 2 , H * 0.52)
+}
