@@ -5,14 +5,14 @@ import Canvas__background from './Canvas__background';
 import Canvas__foreground from './Canvas__foreground';
 import { io } from 'socket.io-client'
 
+const canv_width = "1800";
+const canv_height = "1200";
+
 const GamePage = ( ) : JSX.Element => {
-  //socket을 클래스 밖에서 정의하면 왜인지 모르겠지만, 처음 웹 페이지에 접속하면 소켓이 한 번 connect된다.
   const game_socket = io("localhost:3001/ingame", {
                           transports:["websocket"],
                         });
   let game_basic_info : any = null;
-  const canv_width = "1800";
-  const canv_height = "1200";
   
   const keyPressed = (e : KeyboardEvent) => {
     console.log(e.code);
@@ -27,20 +27,14 @@ const GamePage = ( ) : JSX.Element => {
   // 따라했는데 경고창만 뜨고 안 됨.
   useEffect ( () => {
     console.log("게암 페이지 들어옴");
-    window.addEventListener("keydown", default_keyoff);
-    window.addEventListener("beforeunload", refresh_off);
     game_socket.connect();
-    game_socket.on("game_enter", (info : any) => { 
-      game_basic_info = info;
-      console.log("none ", game_basic_info);
-    })
+    window.addEventListener("keydown", default_keyoff);
     
     document.addEventListener('keydown', keyPressed);
     return () => {
-      window.removeEventListener("keydown", default_keyoff);
-      window.removeEventListener("beforeunload", refresh_off);
-      document.removeEventListener('keydown', keyPressed);
       game_socket.disconnect();
+      window.removeEventListener("keydown", default_keyoff);
+      document.removeEventListener('keydown', keyPressed);
       console.log("게암 페이지 나감");
     }
   }, [])
@@ -69,11 +63,6 @@ function default_keyoff( e : KeyboardEvent ) : void {
     e.preventDefault();
     e.stopPropagation();
   } 
-}
-
-function refresh_off(e : BeforeUnloadEvent) {
-  e.preventDefault();
-  e.returnValue = '';
 }
 
 function quit_game () {
