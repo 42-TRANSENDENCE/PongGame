@@ -12,6 +12,7 @@ const GamePage = ( ) : JSX.Element => {
   const game_socket = io("localhost:3001/ingame", {
                           transports:["websocket"],
                         });
+                        
   let game_basic_info : any = null;
   
   const keyPressed = (e : KeyboardEvent) => {
