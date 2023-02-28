@@ -2,28 +2,30 @@ import * as WS from '@nestjs/websockets'
 import { Socket, Namespace } from "socket.io";
 
 @WS.WebSocketGateway({
-    namespace: 'game',
+    namespace: 'ingame',
     cors: {
-      origin: ['ws://localhost:3000'],
+      origin: ['localhost:3000/ingame'],
     },
 })
 
-// 안 되는 코드
-// @WS.WebSocketGateway(3000, {
-//     namespace: 'game',
-//     transports: ['websocket']
-// })
-
 export class GameGateway
+implements WS.OnGatewayInit, WS.OnGatewayConnection, WS.OnGatewayDisconnect
 {
     @WS.WebSocketServer() server: Namespace;
 
+    games : Array<string> = [];
+    game_queue : Array<Socket> = [];
+
+    afterInit() {
+        console.log(`gamepage : 게이트웨이 생성됨✅`);
+    }
+
     handleConnection(@WS.ConnectedSocket() socket: Socket) {
-        console.log(`${socket.id} 연결 됨`);
+        console.log(`gamepage : ${socket.id} 연결 됨`);
     }
     
     handleDisconnect(@WS.ConnectedSocket() socket: Socket) {
-        console.log(`${socket.id} 연결 끊어짐.`);
+        console.log(`gamepage : ${socket.id} 연결 끊어짐.`);
     }
 
     @WS.SubscribeMessage('keypress')
