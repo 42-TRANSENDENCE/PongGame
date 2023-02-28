@@ -14,7 +14,6 @@ implements WS.OnGatewayInit, WS.OnGatewayConnection, WS.OnGatewayDisconnect
     @WS.WebSocketServer() server: Namespace;
 
     games : Array<string> = [];
-    game_queue : Array<Socket> = [];
 
     afterInit() {
         console.log(`gamepage : 게이트웨이 생성됨✅`);
@@ -35,4 +34,5 @@ implements WS.OnGatewayInit, WS.OnGatewayConnection, WS.OnGatewayDisconnect
     ) {
         console.log(socket.id, keyCode)
     }
+
 };
