@@ -1,4 +1,4 @@
-import './Game.css'
+import './GamePage.css'
 import {useEffect, useRef} from 'react'
 
 interface CanvasProps {

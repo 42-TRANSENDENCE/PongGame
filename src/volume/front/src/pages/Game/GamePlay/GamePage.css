@@ -1,0 +1,75 @@
+
+.game__body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+  gap : 1rem;
+}
+
+.container__canvas {
+  background: wheat;
+  --canv_width : min(60vw, 800px);
+  --canv_height : calc(var(--canv_width)*(2/3) + 8vw);
+  width: var(--canv_width);
+  height: var(--canv_height);
+  border-radius: 3vw;
+  position: relative; 
+}
+
+.container__canvas canvas {
+  position: absolute;
+  border: none;
+  width: var(--canv_width);
+  height: calc(var(--canv_width)*(2/3));
+  height: 40vw;
+  top : 4vw;
+  left : 0;
+}
+
+.game_score {
+  position: absolute;
+  top: 50%;
+  left: 0;
+}
+
+.quit_button {
+  background: rgb(148, 134, 109);
+  color: black;
+  box-sizing: border-box;
+  padding: var(--app__padding);
+  width: calc(100% - 6*(var(--app__padding)));
+  max-width: 200px;
+  height: 20px;
+
+  border: calc(var(--border-width)/2) solid rgb(148, 134, 109);
+  border-radius: calc(var(--app__padding));
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-decoration-line: none;
+}
+
+.quit_button:hover {
+  background: wheat;
+  color: rgb(2, 31, 13);
+}
+
+.quit_button:active {
+  border: calc(var(--border-width)) solid rgb(148, 134, 109);
+  background: rgb(148, 134, 109);
+  color: rgb(2, 31, 13);
+}
+
+.quit_button > p {
+  background: none;
+  border: none;
+  text-align: center;
+  font-size: 13pt;
+}

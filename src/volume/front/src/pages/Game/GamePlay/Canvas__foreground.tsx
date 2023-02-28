@@ -1,13 +1,11 @@
 import React, { useEffect, useRef} from 'react'
 
-
 const Canvas__foreground = (props : any) : JSX.Element => {
   const socket = props.socket;
   const CANV_RATIO = props.width / 1200;
   
   const CANV_W = props.width;
   const CANV_H = CANV_W * 2 / 3;
-  // const RAD = CANV_W / 60;
   const PADDLE_H = CANV_H / 5;
   const PADDLE_W = PADDLE_H / 20;
   const PADDLE_L = PADDLE_W * 5;

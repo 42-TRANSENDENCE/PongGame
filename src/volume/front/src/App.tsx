@@ -1,15 +1,14 @@
-//import React, {useEffect, useState}, from 'react'
 import {BrowserRouter, Routes, Route} from 'react-router-dom';
-
 import './App.css';
-import Home from './pages/Home/Home'
-import Game from './pages/Game/Game'
+import DefaultHome from './pages/Other/DefaultHome';
+import GameHome from './pages/Game/GameHome/GameHome';
+import GamePlay from './pages/Game/GamePlay/GamePage';
 
 function App() : JSX.Element {
   return (
     <div className="App">
       <div className="main__title" >Hello Pong</div>
-        <MainBody />
+      <div className="main__body" ><MainBody /></div>
       <div className='main__footer'>Hello Pong</div>
     </div>
   );
@@ -17,12 +16,15 @@ function App() : JSX.Element {
 
 export default App;
 
+/*===========================================================================*/
+
 const MainBody = ( ) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/game' element={<Game/>}/>
+        <Route path='/' element={<DefaultHome/>}/>
+        <Route path='/gamehome' element={<GameHome/>}/>
+        <Route path='/ingame' element={<GamePlay/>}/>
       </Routes>
     </BrowserRouter>
   )
