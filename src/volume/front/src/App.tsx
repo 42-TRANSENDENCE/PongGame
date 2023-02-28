@@ -22,9 +22,9 @@ const MainBody = ( ) => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<DefaultHome/>}/>
-        <Route path='/gamehome' element={<GameHome/>}/>
-        <Route path='/ingame' element={<GamePlay/>}/>
+        <Route path='' element={<DefaultHome/>}/>
+        <Route path='gamehome' element={<GameHome/>} />
+        <Route path='ingame/:id' element={<GamePlay/>}/>
       </Routes>
     </BrowserRouter>
   )
