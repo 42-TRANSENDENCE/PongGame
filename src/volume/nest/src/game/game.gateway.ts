@@ -1,15 +1,9 @@
 import * as WS from '@nestjs/websockets'
 import { Socket, Namespace } from "socket.io";
 
-@WS.WebSocketGateway({
-    namespace: 'ingame',
-    cors: {
-      origin: ['localhost:3000/ingame'],
-    },
-})
-
+@WS.WebSocketGateway({namespace: '/ingame'})
 export class GameGateway
-implements WS.OnGatewayInit, WS.OnGatewayConnection, WS.OnGatewayDisconnect
+implements WS.OnGatewayInit
 {
     @WS.WebSocketServer() server: Namespace;
 
