@@ -11,12 +11,13 @@ enum GameHomeState {
   Wating
 }
 
-const gamehome_socket = io("localhost:3001/gamehome", {
+const gamehome_socket = io("ws://localhost:3001/gamehome", {
                           transports:["websocket"],
                         });
 
 const GameHome = ( ) : JSX.Element => {
   const [state, SetState] = useState(GameHomeState.Default);
+  const navigate = useNavigate();
 
   useEffect(() => {
       console.log("게암 홈 들어옴.");
