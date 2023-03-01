@@ -28,6 +28,10 @@ const GameHome = ( ) : JSX.Element => {
         SetState(GameHomeState.Default);
       });
 
+      gamehome_socket.on("enter_to_game", () => {
+        navigate('../ingame/:12');
+      })
+
       return () => {
         gamehome_socket.off("in_the_queue");
         gamehome_socket.off("out_of_queue");
