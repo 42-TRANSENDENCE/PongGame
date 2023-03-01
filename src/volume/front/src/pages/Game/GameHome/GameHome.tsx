@@ -1,6 +1,7 @@
 import './styles/GameHome.css'
 import { io } from 'socket.io-client'
 import { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import FriendList from './components/FriendList'
 import PlayerProfile from './components/PlayerProfile'
 import JoinButton from './components/JoinButton'
