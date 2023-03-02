@@ -1,6 +1,5 @@
 import '../styles/JoinButton.css'
 import { Socket } from 'socket.io-client'
-import { Link } from 'react-router-dom';
 
 const JoinButton = (props : any) => {
   const socket : Socket = props.socket;
@@ -17,12 +16,9 @@ const JoinButton = (props : any) => {
   }
   
   return (
-      // <Link to="/ingame/:id" className='joinbutton' onClick={join_clicked} >
-      //   <p>Join Game</p>
-      // </ Link>
       <div className='joinbutton' onClick={join_clicked} >
         { (iswaiting) ? <p>Cancel</p> : <p>Join Game</p> }
-      </ div>
+      </div>
   )
 }
 

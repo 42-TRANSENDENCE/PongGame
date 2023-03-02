@@ -3,6 +3,7 @@ import './App.css';
 import DefaultHome from './pages/Other/DefaultHome';
 import GameHome from './pages/Game/GameHome/GameHome';
 import GamePlay from './pages/Game/GamePlay/GamePage';
+import {gameSocket, GameContext} from './contexts/GameSocket'
 
 function App() : JSX.Element {
   return (
@@ -20,12 +21,16 @@ export default App;
 
 const MainBody = ( ) => {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='' element={<DefaultHome/>}/>
-        <Route path='gamehome' element={<GameHome/>} />
-        <Route path='ingame/:id' element={<GamePlay/>}/>
-      </Routes>
-    </BrowserRouter>
+    <>
+      <GameContext.Provider value={gameSocket}>      
+        <BrowserRouter>
+          <Routes>
+            <Route path='' element={<DefaultHome/>}/>
+            <Route path='gamehome' element={<GameHome/>} />
+            <Route path='ingame/:id' element={<GamePlay/>}/>
+          </Routes>
+        </BrowserRouter>
+      </GameContext.Provider>
+    </>
   )
 }

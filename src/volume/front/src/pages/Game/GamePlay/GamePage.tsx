@@ -1,18 +1,19 @@
 import './GamePage.css'
-import { useEffect } from 'react'
+import { io } from 'socket.io-client'
+import { useEffect, useContext } from 'react'
 import { Link } from 'react-router-dom'
+import { GameContext } from '../../../contexts/GameSocket'
+
 import Canvas__background from './Canvas__background';
 import Canvas__foreground from './Canvas__foreground';
-import { io } from 'socket.io-client'
+
+
 
 const canv_width = "1800";
 const canv_height = "1200";
 
-const game_socket = io("ws://localhost:3001/ingame", {
-                        transports:["websocket"],
-                      });
 const GamePage = ( ) : JSX.Element => {
-                        
+  const game_socket = useContext(GameContext);
   let game_basic_info : any = null;
   
   const keyPressed = (e : KeyboardEvent) => {

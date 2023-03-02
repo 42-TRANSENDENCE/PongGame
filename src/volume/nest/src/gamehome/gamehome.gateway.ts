@@ -2,7 +2,7 @@ import * as WS from '@nestjs/websockets'
 import { WebSocketGateway } from '@nestjs/websockets';
 import { Socket, Server, Namespace } from "socket.io";
 
-@WS.WebSocketGateway({namespace: 'gamehome'})
+@WS.WebSocketGateway({namespace: 'game'})
 export class GameHomeGateway
 implements WS.OnGatewayInit
 {
