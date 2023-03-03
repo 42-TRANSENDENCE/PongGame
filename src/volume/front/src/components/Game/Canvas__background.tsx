@@ -1,4 +1,4 @@
-import './GamePage.css'
+import '../../styles/Game/GamePlay.css'
 import {useEffect, useRef} from 'react'
 
 interface CanvasProps {
@@ -24,11 +24,18 @@ const Canvas__background = (props : any) : JSX.Element => {
   useEffect( () => {
     const canvas : any = canvasRef.current;
     const context : CanvasRenderingContext2D = canvas.getContext('2d');
-    props.socket.on("update_score", (score : Array<number>) => {
-      draw_score({context: context, width: W, height: H, padding: P, color: color}, {p1:score[0], p2:score[1]});
+    const canv : CanvasProps = {
+      context : context,
+      width  : W,
+      height : H,
+      padding: P,
+      color : color
+    }
+    props.socket.on("update_score", (score : ScoreProps) => {
+      draw_score(canv, score);
     });
-    draw_table({context: context, width: W, height: H, padding: P, color: color});
-    draw_score({context: context, width: W, height: H, padding: P, color: color}, {p1:0, p2:0})
+    draw_table(canv);
+    draw_score(canv, {p1:0, p2:0})
     return () => {
       props.socket.off("update_score")
     }
@@ -47,10 +54,14 @@ export default Canvas__background;
 /*                                             */
 /*=============================================*/
                         
-const draw_table = ( {context, width, height, padding, color} : CanvasProps ) => {
-  const W = width;
-  const H = height;
-  const P = padding;
+function draw_table (
+  canv : CanvasProps ) {
+  const context = canv.context;
+  const W = canv.width;
+  const H = canv.height;
+  const P = canv.padding;
+  const color = canv.color;
+
   context.fillStyle = '#333333';
   context.fillRect(0, 0, W, H);
 
@@ -81,10 +92,14 @@ const draw_table = ( {context, width, height, padding, color} : CanvasProps ) =>
   context.strokeText(`:`, W / 2 , H * 0.5)
 };
 
-function draw_score({context, width, height, padding} : CanvasProps, scores : ScoreProps) {
-  const W = width;
-  const H = height;
-  const P = padding;
+function draw_score(
+  canv : CanvasProps,
+  scores : ScoreProps) {
+  const context = canv.context;
+  const W = canv.width;
+  const H = canv.height;
+  const P = canv.padding;
+
   context.fillStyle = '#333333';
   context.fillRect(P*3    , P * 3, W/2 - 4*P, H - 6*P);
   context.fillRect(W/2 + P, P * 3, W/2 - 4*P, H - 6*P);

@@ -1,4 +1,4 @@
-import '../styles/JoinButton.css'
+import '../../styles/Game/JoinButton.css'
 import { Socket } from 'socket.io-client'
 
 const JoinButton = (props : any) => {

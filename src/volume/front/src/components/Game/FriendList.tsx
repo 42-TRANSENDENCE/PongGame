@@ -1,6 +1,6 @@
 import { useEffect } from 'react'
 import { Socket } from 'socket.io-client'
-import '../styles/FriendList.css'
+import '../../styles/Game/FriendList.css'
 
 const SingleFriend = (props : any) : JSX.Element => {
   const socket : Socket = props.socket;

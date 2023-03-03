@@ -1,5 +1,5 @@
 import {useEffect} from 'react'
-import '../styles/PlayerProfile.css'
+import '../../styles/Game/PlayerProfile.css'
 
 const PlayerProfile = () : JSX.Element => {
     useEffect(() => {

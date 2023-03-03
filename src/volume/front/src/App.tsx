@@ -1,9 +1,8 @@
-import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import './App.css';
-import DefaultHome from './pages/Other/DefaultHome';
-import GameHome from './pages/Game/GameHome/GameHome';
-import GamePlay from './pages/Game/GamePlay/GamePage';
+import {BrowserRouter, Routes, Route} from 'react-router-dom';
 import {gameSocket, GameContext} from './contexts/GameSocket'
+import DefaultHome from './pages/Other/DefaultHome';
+import Game from './pages/Game/Game';
 
 function App() : JSX.Element {
   return (
@@ -26,8 +25,7 @@ const MainBody = ( ) => {
         <BrowserRouter>
           <Routes>
             <Route path='' element={<DefaultHome/>}/>
-            <Route path='gamehome' element={<GameHome/>} />
-            <Route path='ingame/:id' element={<GamePlay/>}/>
+            <Route path='game' element={<Game/>} />
           </Routes>
         </BrowserRouter>
       </GameContext.Provider>

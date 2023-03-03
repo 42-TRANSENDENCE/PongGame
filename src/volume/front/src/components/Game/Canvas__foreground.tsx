@@ -1,4 +1,10 @@
+import '../../styles/Game/GamePlay.css'
 import React, { useEffect, useRef} from 'react'
+
+interface GameDataType {
+  ball_pos   : { x : number, y : number };
+  paddle_pos : { p1: number, p2: number };
+}
 
 const Canvas__foreground = (props : any) : JSX.Element => {
   const socket = props.socket;
@@ -6,50 +12,42 @@ const Canvas__foreground = (props : any) : JSX.Element => {
   
   const CANV_W = props.width;
   const CANV_H = CANV_W * 2 / 3;
+  const BALL_RAD = 30 * CANV_RATIO;
   const PADDLE_H = CANV_H / 5;
   const PADDLE_W = PADDLE_H / 20;
   const PADDLE_L = PADDLE_W * 5;
   const PADDLE_R = CANV_W - PADDLE_L;
 
   const canvasRef = useRef(null);
-  let game_position_info = {
-    ball: [0,0], 
-    rad : 30,
-    vel: [0, 0],
-    paddle: [0, 0],
-    score: [0, 0]
+  let game_data = {
+    ball_pos   : { x : 0, y : 0 },
+    paddle_pos : { p1: 0, p2: 0 },
   }
   
   useEffect( () => {
     const canvas : any= canvasRef.current;
     const context = canvas.getContext('2d');
 
-    socket.on("update_ball", (ball : any, rad : number, paddle : any) => {
-      redraw_ball (
-        context,
-        [game_position_info.ball, game_position_info.rad],
-        [ball, rad, 'wheat'] );
+    socket.on("update_ball", (data : GameDataType ) => {
+      redraw_ball ( context, game_data.ball_pos, data.ball_pos, 'wheat' );
       redraw_paddle (
         context,
-        [PADDLE_L, game_position_info.paddle[0]],
-        [PADDLE_L, paddle[0]],
+        [PADDLE_L, game_data.paddle_pos.p1],
+        [PADDLE_L, data.paddle_pos.p1],
         'red'
       )
       redraw_paddle (
         context,
-        [PADDLE_R, game_position_info.paddle[1]],
-        [PADDLE_R, paddle[1]],
+        [PADDLE_R, game_data.paddle_pos.p2],
+        [PADDLE_R, data.paddle_pos.p2],
         'green'
       )
-      game_position_info.ball = ball;
-      game_position_info.rad = rad;
-      game_position_info.paddle = paddle;
-    })
-    socket.on("game", (data : any) => { console.log("game??", data); })
-
+      game_data = data;
+      //console.log("update!!", game_data);
+      })
+      
     return () => {
       props.socket.off("update_ball");
-      props.socket.off("game");
     }
   }, [])
 
@@ -60,15 +58,22 @@ const Canvas__foreground = (props : any) : JSX.Element => {
     </>
   );
 
-  function redraw_ball( ctx : any , old_info:any, new_info:any ) {
-    const old_x = old_info[0][0] * CANV_RATIO + CANV_W / 2;
-    const old_y = old_info[0][1] * CANV_RATIO + CANV_H / 2;
-    const old_r = old_info[1] * CANV_RATIO + 1;
-    const new_x = new_info[0][0] * CANV_RATIO + CANV_W / 2;
-    const new_y = new_info[0][1] * CANV_RATIO + CANV_H / 2;
-    const new_r = new_info[1] * CANV_RATIO;
+  function redraw_ball( 
+    ctx : any , 
+    old_info : { x : number, y : number },
+    new_info : { x : number, y : number },
+    color : string
+  ) {
+    //const old_x = old_info[0][0] * CANV_RATIO + CANV_W / 2;
+    //const old_y = old_info[0][1] * CANV_RATIO + CANV_H / 2;
+    const old_x = old_info.x * CANV_RATIO + CANV_W / 2;
+    const old_y = old_info.y * CANV_RATIO + CANV_H / 2;
+    const old_r = BALL_RAD+ 1;
+    const new_x = new_info.x * CANV_RATIO + CANV_W / 2;
+    const new_y = new_info.y * CANV_RATIO + CANV_H / 2;
+    const new_r = BALL_RAD;
     ctx.clearRect(old_x - old_r, old_y - old_r, old_x + old_r, old_y + old_r);
-    ctx.fillStyle = new_info[2];
+    ctx.fillStyle = color;
     ctx.beginPath();
     ctx.ellipse(new_x, new_y, new_r, new_r, 0, 0, 2*Math.PI);
     ctx.fill();
