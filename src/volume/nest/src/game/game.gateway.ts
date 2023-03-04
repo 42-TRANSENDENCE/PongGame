@@ -26,6 +26,7 @@ implements WS.OnGatewayInit
     
     handleDisconnect(@WS.ConnectedSocket() socket: Socket) {
         this.lobby.quit_queue(socket);
+        this.ingame.quitGame(this.nsp, socket.id);
         console.log(`game : ${socket.id} 연결 끊어짐.`);
     }
 
@@ -78,6 +79,13 @@ implements WS.OnGatewayInit
         @WS.MessageBody() roomId : string
     ){
         this.ingame.handlePlayerReady(this.nsp, roomId, socket.id);
+    }
+
+    @WS.SubscribeMessage('quit_game')
+    handleQuitGame(
+        @WS.ConnectedSocket() socket: Socket,
+    ){
+        this.ingame.quitGame(this.nsp, socket.id);
     }
 
     @WS.SubscribeMessage('keypress')

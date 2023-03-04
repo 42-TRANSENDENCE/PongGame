@@ -25,10 +25,10 @@ const Canvas__foreground = (props : any) : JSX.Element => {
   }
   
   useEffect( () => {
-    const canvas : any= canvasRef.current;
+    const canvas : any = canvasRef.current;
     const context = canvas.getContext('2d');
 
-    socket.on("update_ball", (data : GameDataType ) => {
+    socket.on("update_game", (data : GameDataType ) => {
       redraw_ball ( context, game_data.ball_pos, data.ball_pos, 'orange' );
       redraw_paddle (
         context,
@@ -47,13 +47,12 @@ const Canvas__foreground = (props : any) : JSX.Element => {
       })
       
     return () => {
-      props.socket.off("update_ball");
+      props.socket.off("update_game");
     }
   }, [])
 
   return ( 
     <>
-      <div className='Game_footer'> </div>
       <canvas ref={canvasRef} width={CANV_W} height={CANV_H}/>
     </>
   );
@@ -63,25 +62,30 @@ const Canvas__foreground = (props : any) : JSX.Element => {
     old_info : { x : number, y : number },
     new_info : { x : number, y : number },
     color : string
-  ) {
-    //const old_x = old_info[0][0] * CANV_RATIO + CANV_W / 2;
-    //const old_y = old_info[0][1] * CANV_RATIO + CANV_H / 2;
+  ) : void {
+    // erase old ball
     const old_x = old_info.x * CANV_RATIO + CANV_W / 2;
     const old_y = old_info.y * CANV_RATIO + CANV_H / 2;
     const old_r = BALL_RAD + 1;
+    ctx.clearRect(old_x - old_r, old_y - old_r, old_r * 2, old_r * 2);
+
+    // draw new ball
     const new_x = new_info.x * CANV_RATIO + CANV_W / 2;
     const new_y = new_info.y * CANV_RATIO + CANV_H / 2;
     const new_r = BALL_RAD;
-    ctx.clearRect(old_x - old_r, old_y - old_r, old_r * 2, old_r * 2);
     ctx.fillStyle = color;
     ctx.beginPath();
     ctx.ellipse(new_x, new_y, new_r, new_r, 0, 0, 2*Math.PI);
     ctx.fill();
   }
 
-  function redraw_paddle(ctx:any, old_center:any, new_center:any, color:any) {
+  function redraw_paddle(
+    ctx : any,
+    old_center : [number, number],
+    new_center : [number, number],
+    color : string
+  ) : void {
     // erase old paddle
-
     const old_x = old_center[0];
     const old_y = old_center[1];
     const old_ltx = old_x - PADDLE_W / 2 - 1;

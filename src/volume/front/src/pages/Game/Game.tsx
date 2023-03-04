@@ -7,7 +7,6 @@ import { GamePlay } from '../../components/Game/GamePlay';
 
 const Game = () : JSX.Element => {
   const [gamestate, setGamestate] = useState(GameState.Lobby);
-  // const [gamestate, setGamestate] = useState(GameState.InGame);
   const [room, setRoom] = useState(null);
   const socket = useContext(GameContext);
 

@@ -14,30 +14,28 @@ export const GamePlay = (props : any) => {
   const room_id : string = props.roomId;
   const setState = props.setGamestate;
   const [color, setColor] = useState("wheat");
+  const [isgameover, setIsGameOver] = useState(false);
+  let isWin : boolean | undefined = undefined;
   let up_pressed = false;
   let down_pressed = false;
   
-  const KeyDown = (e : KeyboardEvent) => {
+  const keyPressed = (e : KeyboardEvent) => {
     if (up_pressed === false && e.code === "ArrowUp") {
-      console.log(room_id, e.code);
       up_pressed = true;
       game_socket.emit("keypress", room_id, e.code);
     }
     if (down_pressed === false && e.code === "ArrowDown") {
-      console.log(room_id, e.code);
       down_pressed = true;
       game_socket.emit("keypress", room_id, e.code);
     }
   }
 
-  const KeyUp = (e : KeyboardEvent) => {
+  const keyReleased = (e : KeyboardEvent) => {
     if (up_pressed === true && e.code === "ArrowUp") {
-      console.log(room_id, e.code);
       up_pressed = false;
       game_socket.emit("keyrelease", room_id, e.code);
     }
     if (down_pressed === true && e.code === "ArrowDown") {
-      console.log(room_id, e.code);
       down_pressed = false;
       game_socket.emit("keyrelease", room_id, e.code);
     }
@@ -50,15 +48,17 @@ export const GamePlay = (props : any) => {
     } else {
       setColor ('red');
     }
-    document.addEventListener('keydown', KeyDown);
-    document.addEventListener('keyup', KeyUp);
+    document.addEventListener('keydown', keyPressed);
+    document.addEventListener('keyup', keyReleased);
     game_socket.off("game_start");
   }
 
-  const gameOver = () : void => {
-    document.removeEventListener('keydown', KeyDown);
-    document.removeEventListener('keyup', KeyUp);
-    game_socket.off("game_over");
+  const gameOver = ( winner : string ) : void => {
+    document.removeEventListener('keydown', keyPressed);
+    document.removeEventListener('keyup', keyReleased);
+    setIsGameOver(game_socket.id === winner);
+    isWin = (game_socket.id === winner);
+    console.log("game_over.",(isgameover)?("you win"):("you lose"));
   }
 
   const quitGame = () => {
@@ -76,8 +76,8 @@ export const GamePlay = (props : any) => {
     game_socket.emit("ready", room_id);
     return () => {
       window.removeEventListener("keydown", default_keyoff);
-      document.removeEventListener('keydown', KeyDown);
-      document.removeEventListener('keyup', KeyUp);
+      document.removeEventListener('keydown', keyPressed);
+      document.removeEventListener('keyup', keyReleased);
       console.log("게암 페이지 나감");
     }
 
@@ -86,7 +86,7 @@ export const GamePlay = (props : any) => {
   return (
       <div className='game__body'>
         <div className='container__canvas'>
-          <Canvas__background socket={game_socket} width={CANV_WIDTH} height={CANV_HEIGHT} color={color}/>
+          <Canvas__background socket={game_socket} width={CANV_WIDTH} height={CANV_HEIGHT} color={color} isWin={isWin}/>
           <Canvas__foreground socket={game_socket} width={CANV_WIDTH} height={CANV_HEIGHT} />
         </div>
         <div className='quit_button' onClick={quitGame}>

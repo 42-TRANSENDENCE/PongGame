@@ -36,7 +36,14 @@ const Canvas__background = (props : any) : JSX.Element => {
       draw_score(canv, score);
     });
     draw_table(canv);
-    draw_score(canv, {p1:0, p2:0})
+    draw_score(canv, {p1:0, p2:0});
+    props.socket.on("game_over", (winner : string) => {
+      const isWin = props.socket.id === winner;
+      setTimeout( () => {
+        draw_message(canv, (isWin)?("You Win :)"):("You Lose :("));
+      }, 300)
+    })
+
     return () => {
       props.socket.off("update_score")
     }
@@ -56,7 +63,8 @@ export default Canvas__background;
 /*=============================================*/
                         
 function draw_table (
-  canv : CanvasProps ) {
+  canv : CanvasProps
+) : void {
   const context = canv.context;
   const W = canv.width;
   const H = canv.height;
@@ -95,7 +103,8 @@ function draw_table (
 
 function draw_score(
   canv : CanvasProps,
-  scores : ScoreProps) {
+  scores : ScoreProps
+) : void {
   const context = canv.context;
   const W = canv.width;
   const H = canv.height;
@@ -109,4 +118,19 @@ function draw_score(
   context.strokeStyle = ""
   context.strokeText(`${scores.p1}    ${scores.p2}`, W / 2 , H * 0.52)
   context.fillText(`${scores.p1}    ${scores.p2}`, W / 2 , H * 0.52)
+}
+
+function draw_message (
+  canv : CanvasProps,
+  message : string,
+) : void {
+  const context = canv.context;
+  const W = canv.width;
+  const H = canv.height;
+  const P = canv.padding;
+
+  context.fillStyle = "grey";
+  context.font = "200px Arial";
+  context.textBaseline = "bottom"
+  context.fillText(`${message}`, W / 2 , H * 0.3)
 }

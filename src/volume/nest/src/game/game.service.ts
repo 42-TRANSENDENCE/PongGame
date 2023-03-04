@@ -10,7 +10,7 @@ const PADDLE_H = 160; //
 const PADDLE_W = 24;
 const PADDLE_L = 40;
 const PADDLE_R = 40;
-const WIN_SCORE = 5;
+const WIN_SCORE = 3;
 const PADDLE_SPEED = 10;
 const BALL_VEL_INIT_X = 4;
 const BALL_VEL_INIT_Y = 3;
@@ -27,7 +27,7 @@ type GameDataType = {
 
 type GameType = {
   gameId     : string;
-  isIngame   : boolean;
+  intervalId : ReturnType<typeof setInterval> | null;
   isReady    : {p1 : boolean, p2 : boolean};
   players    : {p1 : string,  p2 : string };
   spectators : Array<string>;
@@ -41,11 +41,11 @@ export class GameService {
     roomId : string,
     p1 : string,
     p2 : string,
-  ) {
+  ) : void {
     console.log("new room Created", roomId);
     const game : GameType = {
       gameId: roomId,
-      isIngame: false,
+      intervalId: null,
       isReady : {p1: false, p2: false},
       players: {p1: p1, p2: p2},
       spectators: [],
@@ -65,7 +65,7 @@ export class GameService {
     roomId : string, 
     socketId : string, 
     keyCode : string
-  ) {
+  ) : void {
     let game = this.__game_list.get(roomId);
     if (socketId === game.players.p1) {
       if ( keyCode === 'ArrowUp' )
@@ -84,7 +84,7 @@ export class GameService {
     roomId : string, 
     socketId : string, 
     keyCode : string
-  ) {
+  ) : void {
     let game = this.__game_list.get(roomId);
     if (socketId === game.players.p1) {
       if ( keyCode === 'ArrowUp' )
@@ -103,7 +103,7 @@ export class GameService {
     nsp : Namespace,
     roomId: string,
     socketId: string
-  ) {
+  ) : void {
     let game = this.__game_list.get(roomId);
     if (game) {
       if (socketId === game.players.p1)
@@ -118,35 +118,67 @@ export class GameService {
     }
   }
 
+  quitGame (
+    nsp : Namespace,
+    socketId: string,
+  ) : void {
+    const game : GameType | undefined = this.__player_list.get(socketId);
+    // 1. 소켓 아이디로 플레이어의 게임ID를 찾는다.
+    if (game === undefined)
+      return;
+    
+      // 2. 해당 게임에서 나가는 플레이어의 점수를 -1로 바꾼다.
+    if (game.players.p1 === socketId)
+      game.data.score.p1 = -1;
+    else if (game.players.p2 === socketId)
+      game.data.score.p2 = -1;
+
+    // 3. 점수를 업데이트한다.
+    nsp.to(game.gameId).emit("update_score", game.data.score);
+      
+    // 4. game_over이벤트를 전송한다. (승자는 안 나간 플레이어)
+    if (game.players.p1 === socketId)
+      nsp.to(game.gameId).emit("game_over", game.players.p2);
+    else if (game.players.p2 === socketId)
+      nsp.to(game.gameId).emit("game_over", game.players.p1);
+    
+    // 5. __stop_game호출한다.
+    this.__stop_game(game);
+  }
+
   /* ======= private ====== */
   /* attribute */
+  // gameID로 게임을 관리하는 자료.
   private __game_list : Map<string, GameType> = new Map<string, GameType>();
+  // playerID로 gameID를 관리하는  자료.
+  private __player_list : Map<string, GameType> = new Map<string, GameType>();
 
   /* method */
   private __start_game(
     nsp : Namespace,
     game : GameType
-  ) {
-    let g = game;
+  ) : void {
     console.log("loop 시작");
-
-    const gameLoop = setInterval(() => {
-      this.__single_game_frame(nsp, g);
-      if (g.data.score.p1 >= WIN_SCORE) {
-        nsp.to(g.gameId).emit("game_over", g.players.p1);
-      } else if (g.data.score.p2 >= WIN_SCORE ) {
-        nsp.to(g.gameId).emit("game_over", g.players.p2);
-      } else {
-        nsp.to(g.gameId).emit("update_ball", {
-          ball_pos   : g.data.ball_pos,
-          paddle_pos : g.data.paddle_pos,
-        })
-        // console.log("updating", g.data.ball_pos, g.data.paddle_pos)
-        return;
-      }
-      console.log("게임 종료")
-      clearInterval(gameLoop);
+    this.__player_list.set(game.players.p1, game);
+    this.__player_list.set(game.players.p2, game);
+    game.intervalId = setInterval(() => {
+      this.__single_game_frame(nsp, game);
     }, 1000 / 60)
+  }
+
+  private __stop_game(
+    game : GameType
+  ) : void {
+    if (game.intervalId !== null){
+      console.log("게임 종료")
+      clearInterval(game.intervalId);
+      game.intervalId = null;
+      this.__player_list.delete(game.players.p1);
+      this.__player_list.delete(game.players.p2);
+      this.__game_list.delete(game.gameId);
+    } else {
+      console.log("게임 없음")
+    }
   }
 
   private __single_game_frame(
@@ -155,14 +187,18 @@ export class GameService {
   ) : void {
     this.__score_check(nsp, game);
     this.__collid_check(game);
-    game.data.ball_pos.x += game.data.ball_vel.x;
-    game.data.ball_pos.y += game.data.ball_vel.y;
     this.__keyboard_check(game);
+
+    // console.log("updating", game.data.ball_pos, game.data.paddle_pos)
+    nsp.to(game.gameId).emit("update_game", {
+      ball_pos   : game.data.ball_pos,
+      paddle_pos : game.data.paddle_pos,
+    })
   }
 
   private __keyboard_check(
     game: GameType
-  ) {
+  ) : void {
     const p1_dir : number = Number(game.data.down_pressed.p1) - Number(game.data.up_pressed.p1);
     const p2_dir : number = Number(game.data.down_pressed.p2) - Number(game.data.up_pressed.p2);
     
@@ -185,6 +221,8 @@ export class GameService {
     this.__wall_collision(game.data);
     this.__paddle_collision(game.players.p1, game);
     this.__paddle_collision(game.players.p2, game);
+    game.data.ball_pos.x += game.data.ball_vel.x;
+    game.data.ball_pos.y += game.data.ball_vel.y;
   }
 
   private __score_check(
@@ -194,14 +232,21 @@ export class GameService {
     const pos = game.data.ball_pos
     let score = game.data.score;
 
-    if (pos.x <= TABLE_LEFT + BALL_RAD)
+    if (pos.x <= TABLE_LEFT + BALL_RAD){
       score.p2 += 1;
-    else if (pos.x >= TABLE_RIGHT - BALL_RAD)
+      nsp.to(game.gameId).emit("update_score", score);
+      if (score.p2 >= WIN_SCORE) {
+        nsp.to(game.gameId).emit("game_over", game.players.p2);
+        this.__stop_game(game);
+      }
+    } else if (pos.x >= TABLE_RIGHT - BALL_RAD) {
       score.p1 += 1;
-    else
-      return;
-    nsp.to(game.gameId).emit("update_score", score);
-    return ;
+      nsp.to(game.gameId).emit("update_score", score);
+      if (score.p1 >= WIN_SCORE) {
+        nsp.to(game.gameId).emit("game_over", game.players.p1);
+        this.__stop_game(game);
+      }
+    }
   }
 
   private __wall_collision (
@@ -230,12 +275,10 @@ export class GameService {
     let vel = game.data.ball_vel;
     const ball = game.data.ball_pos;
 
-    if (player === game.players.p1){
+    if (player === game.players.p1)
       center = {x: TABLE_LEFT + PADDLE_L, y: game.data.paddle_pos.p1}
-    }
-    else if (player === game.players.p2) {
+    else if (player === game.players.p2) 
       center = {x: TABLE_RIGHT - PADDLE_R, y: game.data.paddle_pos.p2}
-    }
     else
       return;
     const rad   = PADDLE_W / 2;
@@ -244,21 +287,21 @@ export class GameService {
     const left  = center.x - PADDLE_W / 2 - BALL_RAD;
     const right = center.x + PADDLE_W / 2 + BALL_RAD;
 
-    if (left <= ball.x && ball.x <= right && top <= ball.y && ball.y <= bot) {
+    if (left <= ball.x && ball.x <= right && top <= ball.y && ball.y <= bot)
       game.data.ball_vel = {x: -vel.x, y: vel.y};
-    } else if (this.__circle_collid( {x: ball.x,   y: ball.y, rad: BALL_RAD}, 
-                                     {x: center.x, y: top,    rad: rad} ) ||
-               this.__circle_collid( {x: ball.x,   y: ball.y, rad: BALL_RAD},
-                                     {x: center.x, y: bot,    rad: rad} )) {
+    else if (this.__circle_collision( {x: ball.x,   y: ball.y, rad: BALL_RAD}, 
+                                      {x: center.x, y: top,    rad: rad     } ) ||
+             this.__circle_collision( {x: ball.x,   y: ball.y, rad: BALL_RAD},
+                                      {x: center.x, y: bot,    rad: rad     } ))
       game.data.ball_vel = {x: -vel.x, y: -vel.y};
-    } else {
+    else 
       return ;
-    }
+    
     game.data.ball_vel.x *= ACCEL_RATIO;
     game.data.ball_vel.y *= ACCEL_RATIO;
   }
 
-  private __circle_collid(
+  private __circle_collision(
     c1 : {x: number, y: number, rad: number},
     c2: {x: number, y: number, rad: number}
   ) : boolean {
