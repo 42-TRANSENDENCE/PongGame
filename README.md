@@ -2,7 +2,7 @@
 multi-player web pong game.  
 
 <p align="center">
- <img width="500" alt="image" src="https://user-images.githubusercontent.com/60467872/218838147-fe3fc0f1-b246-4a90-bbf6-7c8f14b73a04.png">  
+ <img width="500" alt="image" src="https://user-images.githubusercontent.com/60467872/222933520-470e6c78-d106-4825-966f-78393c6acf3f.png">
 </p>  
 <p align="center">
  <em>sample image</em>
