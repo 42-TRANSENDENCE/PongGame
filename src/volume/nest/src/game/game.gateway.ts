@@ -87,7 +87,17 @@ implements WS.OnGatewayInit
     ) {
         const roomId : string = payload[0];
         const keyCode : string = payload[1];
-        this.ingame.handleKeyboardInput(roomId, socket.id, keyCode)
+        this.ingame.handleKeyPressed(roomId, socket.id, keyCode)
+    }
+
+    @WS.SubscribeMessage('keyrelease')
+    handleKeyReleased(
+      @WS.ConnectedSocket() socket: Socket,
+      @WS.MessageBody() payload : any
+    ) {
+        const roomId : string = payload[0];
+        const keyCode : string = payload[1];
+        this.ingame.handleKeyReleased(roomId, socket.id, keyCode)
     }
 
 };

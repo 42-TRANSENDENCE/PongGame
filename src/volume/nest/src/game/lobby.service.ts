@@ -61,6 +61,6 @@ export class LobbyService {
     p1.join(roomId);
     p2.join(roomId);
     nsp.to(roomId).emit("enter_to_game", roomId, p1.id, p2.id);
-    this.gameService.makeNewRoom(nsp, roomId, p1.id, p2.id);
+    this.gameService.makeNewRoom(roomId, p1.id, p2.id);
   }
 }
