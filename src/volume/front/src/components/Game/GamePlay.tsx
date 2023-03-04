@@ -14,21 +14,51 @@ export const GamePlay = (props : any) => {
   const room_id : string = props.roomId;
   const setState = props.setGamestate;
   const [color, setColor] = useState("wheat");
+  let up_pressed = false;
+  let down_pressed = false;
   
-  const keyPressed = (e : KeyboardEvent) => {
+  const KeyDown = (e : KeyboardEvent) => {
+    if (up_pressed === false && e.code === "ArrowUp") {
       console.log(room_id, e.code);
-      if(["ArrowUp","ArrowDown"].indexOf(e.code) > -1) { 
-        game_socket.emit("keypress", room_id, e.code);
-    } 
+      up_pressed = true;
+      game_socket.emit("keypress", room_id, e.code);
+    }
+    if (down_pressed === false && e.code === "ArrowDown") {
+      console.log(room_id, e.code);
+      down_pressed = true;
+      game_socket.emit("keypress", room_id, e.code);
+    }
+  }
+
+  const KeyUp = (e : KeyboardEvent) => {
+    if (up_pressed === true && e.code === "ArrowUp") {
+      console.log(room_id, e.code);
+      up_pressed = false;
+      game_socket.emit("keyrelease", room_id, e.code);
+    }
+    if (down_pressed === true && e.code === "ArrowDown") {
+      console.log(room_id, e.code);
+      down_pressed = false;
+      game_socket.emit("keyrelease", room_id, e.code);
+    }
   }
 
   const gameStart = ( p1_id : string ) : void => {
     console.log("시작")
     if (p1_id !== game_socket.id) {
       setColor('green');
+    } else {
+      setColor ('red');
     }
-    document.addEventListener('keydown', keyPressed,);
+    document.addEventListener('keydown', KeyDown);
+    document.addEventListener('keyup', KeyUp);
     game_socket.off("game_start");
+  }
+
+  const gameOver = () : void => {
+    document.removeEventListener('keydown', KeyDown);
+    document.removeEventListener('keyup', KeyUp);
+    game_socket.off("game_over");
   }
 
   const quitGame = () => {
@@ -41,11 +71,13 @@ export const GamePlay = (props : any) => {
     console.log("게임으로 들어옴");
     window.addEventListener("keydown", default_keyoff);
     game_socket.on("game_start", gameStart)
+    game_socket.on("game_over", gameOver)
 
     game_socket.emit("ready", room_id);
     return () => {
       window.removeEventListener("keydown", default_keyoff);
-      document.removeEventListener('keydown', keyPressed);
+      document.removeEventListener('keydown', KeyDown);
+      document.removeEventListener('keyup', KeyUp);
       console.log("게암 페이지 나감");
     }
 

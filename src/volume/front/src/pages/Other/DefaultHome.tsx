@@ -2,7 +2,9 @@ import React from 'react'
 
 const DefaultHome = () : JSX.Element => {
   return (
-    <div>DefaultHome</div>
+    <div>
+      <p>NOT FOUND</p>
+    </div>
   )
 }
 

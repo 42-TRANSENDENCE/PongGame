@@ -12,11 +12,16 @@
 
 .container__canvas {
   background: wheat;
-  --canv_width : min(60vw, 800px);
-  --canv_height : calc(var(--canv_width)*(2/3) + 8vw);
+  --canv_width1 : min(60vw, 900px);
+  --canv_height2 : min(80vh, 600px);
+  --canv_height2 : min(600px, calc(95vh - 2 * var(--title_height) - 2vh) * 0.5);
+  --canv_width2 : calc((var(--canv_height2) - 8vh) * 3/2);
+  --canv_width : min(var(--canv_width1), var(--canv_width2));
+  --canv_rad : calc(var(--canv_width) * 0.05);
+  --canv_height : calc(var(--canv_width)*2/3 + var(--canv_rad)*2);
   width: var(--canv_width);
   height: var(--canv_height);
-  border-radius: 3vw;
+  border-radius: var(--canv_rad);
   position: relative; 
 }
 
@@ -25,8 +30,7 @@
   border: none;
   width: var(--canv_width);
   height: calc(var(--canv_width)*(2/3));
-  height: 40vw;
-  top : 4vw;
+  top : var(--canv_rad);;
   left : 0;
 }
 

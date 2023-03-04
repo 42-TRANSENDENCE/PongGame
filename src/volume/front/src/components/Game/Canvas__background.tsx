@@ -22,6 +22,7 @@ const Canvas__background = (props : any) : JSX.Element => {
   const color : string = props.color;
 
   useEffect( () => {
+    console.log("background draw")
     const canvas : any = canvasRef.current;
     const context : CanvasRenderingContext2D = canvas.getContext('2d');
     const canv : CanvasProps = {
@@ -39,7 +40,7 @@ const Canvas__background = (props : any) : JSX.Element => {
     return () => {
       props.socket.off("update_score")
     }
-  }, []);
+  }, [color]);
 
   return ( 
     <canvas ref={canvasRef} width={W} height={H}/>

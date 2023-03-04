@@ -7,9 +7,9 @@ import { GamePlay } from '../../components/Game/GamePlay';
 
 const Game = () : JSX.Element => {
   const [gamestate, setGamestate] = useState(GameState.Lobby);
+  // const [gamestate, setGamestate] = useState(GameState.InGame);
   const [room, setRoom] = useState(null);
   const socket = useContext(GameContext);
-  //let room_id : string | null = null;
 
   useEffect(() => {
     console.log(" [ RENDERING ] : game page : ")
