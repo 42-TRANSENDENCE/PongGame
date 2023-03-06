@@ -27,7 +27,6 @@ services:
     tty: true
     stdin_open: true
     volumes:
-      - ./volume/back:/root/back
       - ./volume/nest:/root/nest
     ports:
       - 4223:22
