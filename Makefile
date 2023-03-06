@@ -7,7 +7,7 @@ E = \033[0m
 UNAME_S = ${shell uname -s}
 
 DOCKER = docker
-DOCKER_COMP = docker-comp
+DOCKER_COMP = docker-compose
 COMPOSE = ./src/docker-compose.yml
 
 .PHONY: up down restart clean re
