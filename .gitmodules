@@ -1,6 +1,6 @@
 [submodule "src/vol/front"]
 	path = src/vol/front
-	url = https://github.com/42-TRANSENDENCE/frontend.git
+	url = git@github.com:42-TRANSENDENCE/frontend.git
 [submodule "src/vol/back"]
 	path = src/vol/back
-	url = https://github.com/42-TRANSENDENCE/backend.git
+	url = git@github.com:42-TRANSENDENCE/backend.git
