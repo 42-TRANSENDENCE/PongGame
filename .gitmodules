@@ -1,6 +1,0 @@
-[submodule "src/FE"]
-	path = src/FE
-	url = git@github.com:42-TRANSENDENCE/frontend.git
-[submodule "src/BE"]
-	path = src/BE
-	url = git@github.com:42-TRANSENDENCE/backend.git

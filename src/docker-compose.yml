@@ -1,38 +1,53 @@
-version: "3.8" 
-
-services:
-  frontend:
-    container_name: front
-    hostname: front
-    networks:
-      - pong_net
-    build: ./frontend
-    image: front:v1
-    init: true
-    tty: true
-    stdin_open: true
-    volumes:
-      - ./volume/front:/root/front
-    ports:
-      - 4222:22
-      - 3000:3000
-  backend:
-    container_name: back
-    hostname: back
-    networks:
-      - pong_net
-    image: back:v1
-    build: ./backend
-    init: true
-    tty: true
-    stdin_open: true
-    volumes:
-      - ./volume/nest:/root/nest
-    ports:
-      - 4223:22
-      - 3001:3001
+version: "3.8"
 
 networks:
-  pong_net:
-    name : pong_net
+  ft_bridge:
+    name: ft_bridge
     driver: bridge
+
+services:
+
+  database:
+    container_name: pong_DB
+    hostname: database
+    image: postgres:latest
+    init: true
+    networks:
+      - ft_bridge
+    env_file:
+      - .env
+
+
+  backend:
+    container_name: pong_BE
+    hostname: backend
+    depends_on:
+      - database
+    build: ./back
+    init: true
+    networks:
+      - ft_bridge
+    ports:
+      - 4223:22
+      - 8181:8181
+    #------------------
+    tty: true
+    stdin_open: true
+
+
+  frontend:
+    container_name: pong_FE
+    hostname: frontend
+    depends_on:
+      - backend
+    build: ./front
+    init: true
+    networks:
+      - ft_bridge
+    ports:
+      - 4222:22
+      - 8080:8080
+    #------------------
+    tty: true
+    stdin_open: true
+
