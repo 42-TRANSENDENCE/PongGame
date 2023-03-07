@@ -11,7 +11,7 @@ services:
     container_name: pong_DB
     hostname: database
     image: postgres:latest
-    init: true
+    # init: true
     networks:
       - ft_bridge
     env_file:
@@ -30,6 +30,8 @@ services:
     ports:
       - 4223:22
       - 8181:8181
+    volumes:
+      - ./vol/back:/sources
     #------------------
     tty: true
     stdin_open: true
@@ -47,6 +49,8 @@ services:
     ports:
       - 4222:22
       - 8080:8080
+    volumes:
+      - ./vol/front:/sources
     #------------------
     tty: true
     stdin_open: true
