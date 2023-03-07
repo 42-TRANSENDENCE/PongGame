@@ -1,8 +1,8 @@
 server {
-        listen 8080 default_server;
-        listen [::]:8080 default_server;
+        listen 5173 default_server;
+        listen [::]:5173 default_server;
 
-        root /front_build;
+        root /build;
 
         index index.html;
 
