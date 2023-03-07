@@ -7,13 +7,13 @@ RUN     sed -i 's/archive.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list &
         sed -i 's/security.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list
 
 RUN	apt-get update && apt-get upgrade -y && apt-get install curl ssh git tree nginx -y
-RUN	git clone -b dkim2_pong --single-branch https://github.com/42-TRANSENDENCE/frontend.git /pong_front
+RUN	git clone -b dkim2_pong  git@github.com:42-TRANSENDENCE/frontend.git /source
 
 # ==== SSH
 COPY	./conf/sshd_config /etc/ssh/sshd_config
 RUN	passwd -d root && service ssh start
 
-WORKDIR /pong_front
+WORKDIR /source
 
 RUN git pull
 RUN npm install yarn && yarn install
