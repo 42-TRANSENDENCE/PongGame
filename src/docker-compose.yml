@@ -33,7 +33,7 @@ services:
       - 4223:22
       - 8181:8181
     volumes:
-      - ./vol/back:/sources
+      - ./vol/back:/root/front
     #------------------
     tty: true
     stdin_open: true
@@ -52,7 +52,7 @@ services:
       - 4222:22
       - 8080:8080
     volumes:
-      - ./vol/front:/sources
+      - ./vol/front:/root/front
     #------------------
     tty: true
     stdin_open: true
