@@ -11,14 +11,13 @@ services:
     container_name: pong_DB
     hostname: database
     image: postgres:latest
-    # init: true
-    networks:
-      - ft_bridge
+    init: true
     env_file:
       - .env
+    networks:
+      - ft_bridge
     ports:
       - 5432
-
 
   backend:
     container_name: pong_BE
@@ -31,7 +30,7 @@ services:
       - ft_bridge
     ports:
       - 4223:22
-      - 8181:8181
+      - 3000:3000
     volumes:
       - ./vol/back:/root/back
     #------------------
@@ -50,7 +49,6 @@ services:
       - ft_bridge
     ports:
       - 4222:22
-      - 8080:8080
       - 5173:5173
     volumes:
       - ./vol/front:/root/front
