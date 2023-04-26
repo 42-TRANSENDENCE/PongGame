@@ -1,0 +1,49 @@
+version: "3.8"
+
+networks:
+  pong_bridge:
+    name: pong_bridge
+    driver: bridge
+
+services:
+  database:
+    container_name: pong_database
+    hostname: pong_db_host
+    image : postgres:latest
+    init : true
+    env_file:
+      - envs/.databaseenv
+    networks:
+      - pong_bridge
+
+  backend:
+    container_name: pong_backend
+    hostname: pong_be_host
+    build: ./src/backend
+    init: true
+    volumes:
+      - ./src/vol/back:/pong
+    networks:
+      - pong_bridge
+    ports:
+      - 3000:3000
+    # === for debug
+      - 4223:22
+    tty: true
+    stdin_open : true
+ 
+  frontend:
+    container_name: pong_frontend
+    hostname: pong_fe_host
+    build: ./src/frontend
+    init: true
+    volumes:
+      - ./src/vol/front:/pong
+    networks:
+      - pong_bridge
+    ports:
+      - 4242:4242
+    # === for debug
+      - 4222:22
+    tty: true
+    stdin_open : true
