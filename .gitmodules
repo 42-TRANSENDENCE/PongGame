@@ -1,0 +1,8 @@
+[submodule "src/vol/back"]
+	path = src/vol/back
+	url = https://github.com/42-TRANSENDENCE/backend.git
+	branch = develop
+[submodule "src/vol/front"]
+	path = src/vol/front
+	url = https://github.com/42-TRANSENDENCE/frontend.git
+	branch = develop
