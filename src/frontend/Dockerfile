@@ -15,17 +15,14 @@ RUN     passwd -d root && service ssh start
 # ==== Node
 RUN     mkdir -p /pong
 COPY    ./conf/.frontenv /.env
+COPY    ./tools/entrypoint.sh /entrypoint.sh
 WORKDIR /pong
 
 # ==== NGINX
-COPY    ./conf/default /etc/nginx/sites_enabled/
+COPY    ./conf/default /etc/nginx/sites-enabled/
 RUN     mkdir -p /var/www/html 
-RUN     echo "#!/bin/bash \
-mv /.env /pong/ \
-npm i --legacy-peer-deps && npm run build && mv dist /var/www/html/pong \
-exec \$@" > /entrypoint.sh && chmod +x /entrypoint.sh
+RUN     chmod +x /entrypoint.sh
 
-CMD ["/usr/sbin/sshd", "-D"]
-# ENTRYPOINT ["sh", "/entrypoint.sh"]
-# CMD ["nginx", "-g", "daemon -off"]
+# CMD ["/usr/sbin/sshd", "-D"]
+ENTRYPOINT ["sh", "/entrypoint.sh"]
 

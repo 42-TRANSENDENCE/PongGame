@@ -15,14 +15,9 @@ RUN     passwd -d root && service ssh start
 # ==== Node
 RUN     mkdir -p /pong
 COPY    ./conf/.backendenv /.env
+COPY    ./tools/entrypoint.sh /entrypoint.sh
 WORKDIR /pong
-RUN     echo "#!/bin/sh \
-mv /.env /pong/ \
-npm i \
-npm start" > /entrypoint.sh && chmod +x /entrypoint.sh
+RUN     chmod +x /entrypoint.sh
 
-
-
-CMD ["/usr/sbin/sshd", "-D"]
-# ENTRYPOINT [ "sh", "/entrypoint.sh" ];
-# CMD ["npm", "start"]
+# CMD ["/usr/sbin/sshd", "-D"]
+ENTRYPOINT [ "sh", "/entrypoint.sh" ];
