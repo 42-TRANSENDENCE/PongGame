@@ -12,17 +12,20 @@ RUN     apt-get update && apt-get upgrade -y && apt-get install ssh vim nginx -y
 COPY    ./conf/sshd_config /etc/ssh/sshd_config
 RUN     passwd -d root && service ssh start
 
+# ==== Node
 RUN     mkdir -p /pong
-COPY    ./conf/.frontenv /pong/.env
+COPY    ./conf/.frontenv /.env
 WORKDIR /pong
 
 # ==== NGINX
 COPY    ./conf/default /etc/nginx/sites_enabled/
 RUN     mkdir -p /var/www/html 
-RUN     echo "#!/bin/bash; echo "FE entrypoint"; npm i && npm run build && mv dist /var/www/html/pong ; nginx -g 'daemon off;'" > /entrypoint.sh && chmod +x /entrypoint.sh
+RUN     echo "#!/bin/bash \
+mv /.env /pong/ \
+npm i --legacy-peer-deps && npm run build && mv dist /var/www/html/pong \
+exec \$@" > /entrypoint.sh && chmod +x /entrypoint.sh
 
-# CMD ["/usr/sbin/sshd", "-D"]
+CMD ["/usr/sbin/sshd", "-D"]
+# ENTRYPOINT ["sh", "/entrypoint.sh"]
 # CMD ["nginx", "-g", "daemon -off"]
-ENTRYPOINT [ "/entrypoint.sh"]
-# CMD ["nginx", "-g", "daemon -off;"]
 
