@@ -21,6 +21,8 @@ services:
     hostname: pong_be_host
     build: ./src/backend
     init: true
+    env_file:
+      - envs/.backendenv
     volumes:
       - ./src/vol/back:/pong
     networks:
@@ -37,6 +39,8 @@ services:
     hostname: pong_fe_host
     build: ./src/frontend
     init: true
+    env_file:
+      - envs/.backendenv
     volumes:
       - ./src/vol/front:/pong
     networks:

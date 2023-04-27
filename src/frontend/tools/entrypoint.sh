@@ -1,6 +1,6 @@
 #!/bin/bash
 
-mv /.env /pong/
+# mv /.env /pong/
 npm i --legacy-peer-deps
 npm run build
 mv dist /var/www/html/pong

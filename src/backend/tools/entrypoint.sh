@@ -1,5 +1,5 @@
 #!/bin/bash
 
-mv /.env /pong/
+# mv /.env /pong/
 npm i
 npm start

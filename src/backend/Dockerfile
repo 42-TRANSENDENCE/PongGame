@@ -15,7 +15,6 @@ RUN     npm install -g npm
 
 # ==== Node
 RUN     mkdir -p /pong
-COPY    ../../envs/.backendenv /.env
 COPY    ./tools/entrypoint.sh /entrypoint.sh
 RUN     chmod +x /entrypoint.sh
 WORKDIR /pong
