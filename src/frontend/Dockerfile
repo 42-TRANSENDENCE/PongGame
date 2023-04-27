@@ -7,22 +7,22 @@ RUN     sed -i 's/archive.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list &
         sed -i 's/security.ubuntu.com/mirror.kakao.com/g' /etc/apt/sources.list
 
 RUN     apt-get update && apt-get upgrade -y && apt-get install ssh vim nginx -y
+RUN     npm install -g npm
 
 # ==== SSH
-COPY    ./conf/sshd_config /etc/ssh/sshd_config
-RUN     passwd -d root && service ssh start
+# COPY    ./conf/sshd_config /etc/ssh/sshd_config
+# RUN     passwd -d root && service ssh start
 
 # ==== Node
 RUN     mkdir -p /pong
-COPY    ./conf/.frontenv /.env
+COPY    ../../envs/.frontenv /.env
 COPY    ./tools/entrypoint.sh /entrypoint.sh
+RUN     chmod +x /entrypoint.sh
 WORKDIR /pong
 
 # ==== NGINX
 COPY    ./conf/default /etc/nginx/sites-enabled/
 RUN     mkdir -p /var/www/html 
-RUN     chmod +x /entrypoint.sh
 
-# CMD ["/usr/sbin/sshd", "-D"]
 ENTRYPOINT ["sh", "/entrypoint.sh"]
 
