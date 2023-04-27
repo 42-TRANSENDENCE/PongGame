@@ -11,10 +11,8 @@ services:
     hostname: pong_db_host
     image : postgres:latest
     init : true
-    environment:
-      POSTGRES_USER: ${DB_USERNAME}
-      POSTGRES_PASSWOR: ${DB_USERNAME}
-      POSTGRES_DB: ${DB_DATABASE}
+    env_file:
+      - envs/.database.env
     networks:
       - pong_bridge
 
@@ -24,7 +22,7 @@ services:
     build: ./src/backend
     init: true
     env_file:
-      - .env
+      - envs/.backend.env
     volumes:
       - ./src/vol/back:/pong
     networks:
@@ -38,16 +36,13 @@ services:
     hostname: pong_fe_host
     build: ./src/frontend
     init: true
-    environment:
-      VITE_AWS_URL: ${BACKEND_URL}
-      VITE_AWS_PORT: ${BACKEND_PORT}
-      VITE_CLIENT_ID: ${CLIENT_ID}
-      VITE_CLIENT_SECRET: ${CLIENT_SECRET}
-      VITE_REDIRECT_URI: ${REDIRECT_URI}
+    env_file:
+      - envs/.frontend.env
     volumes:
       - ./src/vol/front:/pong
     networks:
-      - pong_bridge
+      -
+       pong_bridge
     ports:
       - 4242:4242
 
