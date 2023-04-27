@@ -15,6 +15,7 @@ COMPOSE_FILE = ./docker-compose.yml
 .PHONY: up down restart clean re ps
 
 up :
+	@ git submodule init && git submodule update --recursive
 	@ ${ECHO} "${G} =>  reset ssh host info...${E}"
 	@ ${ECHO} "" > ${HOME}/.ssh/known_hosts
 	@ ${COMPOSE} -f $(COMPOSE_FILE) -p $(NAME) build
