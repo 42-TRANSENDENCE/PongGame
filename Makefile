@@ -6,22 +6,21 @@ B = \033[0;34m
 E = \033[0m
 
 ECHO		 = echo
-DOCKER       = sudo docker
-# DOCKER       = docker
-COMPOSE      = sudo docker compose
-# COMPOSE      = docker compose
+#DOCKER       = sudo docker
+DOCKER       = docker
+#COMPOSE      = sudo docker compose
+COMPOSE      = docker compose
 COMPOSE_FILE = ./docker-compose.yml
 
 .PHONY: up down restart clean re ps
 
 up :
-	@ git submodule init && git submodule update --recursive
 	@ ${ECHO} "${G} =>  reset ssh host info...${E}"
 	@ ${ECHO} "" > ${HOME}/.ssh/known_hosts
 	@ ${COMPOSE} -f $(COMPOSE_FILE) -p $(NAME) build
 	@ ${ECHO} "$(G) =>  build done $(E)";
 	@ ${DOCKER} image ls
-	@ ${COMPOSE} -f $(COMPOSE_FILE) -p $(NAME) up -d
+	@ ${COMPOSE} -f $(COMPOSE_FILE) -p $(NAME) up
 	@ ${ECHO} "$(G) =>  services ready$(E)"
 	@ ${COMPOSE} -f $(COMPOSE_FILE) -p $(NAME) ps
 down:

@@ -1,10 +1,12 @@
 # Transcendence
 
+#@ git submodule init && git submodule update --recursive
+
 AWS addr : `localhost`
 DB port  : `5432`  
 BE port  : `3000`  
 FE port  : `4242`  
-Oauth redirection : `localhost:3000/logincheck`
+Oauth redirection : `localhost:3000/auth/login`
 
 ```
 파일 구조
@@ -12,10 +14,7 @@ Oauth redirection : `localhost:3000/logincheck`
 ├── Makefile
 ├── README.md
 ├── docker-compose.yml
-├── envs
-│   ├── .backendenv
-│   ├── .databaseenv
-│   └── .frontendenv
+├── .env
 └── src
     ├── backend
     │   ├── Dockerfile
