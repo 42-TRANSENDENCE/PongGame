@@ -40,7 +40,7 @@ services:
     build: ./src/frontend
     init: true
     env_file:
-      - envs/.backendenv
+      - envs/.frontendenv
     volumes:
       - ./src/vol/front:/pong
     networks:

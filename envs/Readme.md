@@ -27,7 +27,7 @@ SESSION_SECRET
 FRONTEND_URL
 
 ```
-[.frontenv]
+[.frontendenv]
 ```
 VITE_AWS_URL
 VITE_AWS_PORT

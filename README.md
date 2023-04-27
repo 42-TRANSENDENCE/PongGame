@@ -15,7 +15,7 @@ Oauth redirection : `localhost:3000/logincheck`
 ├── envs
 │   ├── .backendenv
 │   ├── .databaseenv
-│   └── .frontenv
+│   └── .frontendenv
 └── src
     ├── backend
     │   ├── Dockerfile
