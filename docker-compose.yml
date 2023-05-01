@@ -12,7 +12,7 @@ services:
     image : postgres:latest
     init : true
     env_file:
-      - envs/.database.env
+      - .env
     networks:
       - pong_bridge
 
@@ -22,7 +22,7 @@ services:
     build: ./src/backend
     init: true
     env_file:
-      - envs/.backend.env
+      - .env
     volumes:
       - ./src/vol/back:/pong
     networks:
@@ -37,7 +37,7 @@ services:
     build: ./src/frontend
     init: true
     env_file:
-      - envs/.frontend.env
+      - .env
     volumes:
       - ./src/vol/front:/pong
     networks:
